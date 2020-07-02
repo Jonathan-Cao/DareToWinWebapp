@@ -4,7 +4,7 @@
 
 This webapp acts as a companion app to the Telegram Bot game DareToWin (@daretowinbot)<br>
 With this webapp, registered users are able to:
-* upload videos of their dares
+* upload videos of their dares (supports mp4 and webm files)
 * upvote other users' dares and gain upvotes for their own
 * earn badges based on the total number of upvotes they have
 * comment on other users' dares
