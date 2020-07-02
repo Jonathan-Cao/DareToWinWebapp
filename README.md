@@ -26,3 +26,5 @@ To install this webapp:
     $ flask run<br>
     
 6. Navigate to http://localhost:5000/index in your web browser of choice
+
+NOTE: In the current build, the first user to register will have access to admin privileges
