@@ -10,6 +10,8 @@ With this webapp, registered users are able to:
 * comment on other users' dares
 * follow other users so that their dares show up on their main feed
 
+## Setup
+
 To test this webapp on your own machine:
 
 1. In your terminal, navigate to the root directory of the webapp and enter:<br>
