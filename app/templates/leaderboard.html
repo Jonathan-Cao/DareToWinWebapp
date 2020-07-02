@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    <h1>Leaderboard</h1>
+    {% if not posts %}
+        <h3 style="text-align: center;">
+            There are no posts yet :(<br>
+            Head over to Home to be the first to upload!
+        </h3>
+    {% endif %}
+    <ol start={{ start_num }}>
+        {% for post in posts %}
+            <li>{% include '_post.html' %}</li>    
+        {% endfor %}
+    </ol>
+    {% include '_paginate.html' %}
+{% endblock %}

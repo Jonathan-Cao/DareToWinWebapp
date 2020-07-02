@@ -1,0 +1,16 @@
+    <table class="table table-hover">
+        <tr>
+            <td width="70px">
+                <a href="{{ url_for('user', username=report.author.username) }}">
+                    <img src="{{ report.author.avatar(70) }}" />
+                </a>
+            </td>
+            <td>
+                <a href="{{ url_for('user', username=report.author.username) }}">
+                    {{ report.author.username }}
+                </a>
+                posted on {{ moment(report.timestamp).format('LLL') }}:
+                <br>{{ report.reason }}
+            </td>
+        </tr>
+    </table>

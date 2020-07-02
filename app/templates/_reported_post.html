@@ -1,0 +1,46 @@
+    <table class="table table-hover">
+        <tr>
+            <td width="70px">
+                <a href="{{ url_for('user', username=post.author.username) }}">
+                    <img src="{{ post.author.avatar(70) }}" />
+                </a>
+            </td>
+            <td>
+                {{ post.author.badge }}
+                <a href="{{ url_for('user', username=post.author.username) }}">
+                    {{ post.author.username }}
+                </a>
+                posted on {{ moment(post.timestamp).format('LLL') }}:  
+                <br>
+                <video width="320" height="240" controls>
+                  <source src="{{ url_for('open_video', post_dare=post.dare) }}" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <br>
+                {{ post.body }}
+            </td>
+            <td align="right">
+                <a href="{{ url_for('post_report_reasons', post_id=post.id) }}">
+                    Reasons for report
+                </a>
+                <br>
+                <p>
+                    <form action="{{ url_for('ban_post', post_id=post.id) }}" method="post">
+                        {{ form2.hidden_tag() }}
+                        <p>
+                        {{ form2.reason.label }}<br>
+                        {{ form2.reason(size=32) }}
+                         </p>
+                        {{ form2.submit(value='Ban') }} <!Submit button repurposed to Ban button>
+                    </form>
+                </p>
+                <br>
+                <p>
+                    <form action="{{ url_for('dismiss_reported_post', post_id=post.id) }}" method="post">
+                        {{ form.hidden_tag() }}
+                        {{ form.submit(value='Dismiss') }} <!Submit button repurposed to Dismiss button>
+                    </form>
+                </p>
+            </td>
+        </tr>
+    </table>
