@@ -3,8 +3,12 @@
 To install this webapp:
 
 1. In your terminal, navigate to the root directory and enter<br>
+    For versions of Python 3.4 and newer:<br>
     $ python3 -m venv venv<br>
-   which creates the virtual environment folder named venv.<br>
+    For versions of Python older than 3.4 that do not support virtual environments natively:<br>
+    $ sudo pip install virtualenv<br>
+    $ virtualenv venv<br>
+   This creates the virtual environment folder named venv.<br>
 
 2. Enter the virtual environment by entering<br>
     $ source venv/bin/activate<br>
