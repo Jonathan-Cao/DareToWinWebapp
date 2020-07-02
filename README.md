@@ -2,7 +2,7 @@
 
 To test this webapp on your own machine:
 
-1. In your terminal, navigate to the root directory and enter:<br>
+1. In your terminal, navigate to the root directory of the webapp and enter:<br>
     For versions of Python 3.4 and newer:<br>
     $ python3 -m venv venv<br>
     Alternatively, for versions of Python older than 3.4 that do not support virtual environments natively:<br>
