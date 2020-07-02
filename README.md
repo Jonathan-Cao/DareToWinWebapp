@@ -1,5 +1,15 @@
 # DareToWinWebapp
 
+#Introduction
+
+This webapp is acts as a companion app to the Telegram Bot game DareToWin (@daretowinbot)
+With this webapp, registered users are able to:
+* upload videos of their dares
+* upvote other users' dares and gain upvotes for their own
+* earn badges based on the total number of upvotes they have
+* comment on other users' dares
+* follow other users so that their dares show up on their main feed
+
 To test this webapp on your own machine:
 
 1. In your terminal, navigate to the root directory of the webapp and enter:<br>
