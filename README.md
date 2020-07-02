@@ -1,8 +1,8 @@
 # DareToWinWebapp
 
-#Introduction
+## Introduction
 
-This webapp is acts as a companion app to the Telegram Bot game DareToWin (@daretowinbot)<br>
+This webapp acts as a companion app to the Telegram Bot game DareToWin (@daretowinbot)<br>
 With this webapp, registered users are able to:
 * upload videos of their dares
 * upvote other users' dares and gain upvotes for their own
