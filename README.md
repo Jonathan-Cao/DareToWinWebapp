@@ -17,6 +17,10 @@ To install this webapp:
     $ flask db migrate -m "initial_migration"<br>
     $ flask db upgrade<br>
    You should see a new file named app.db in the root directory<br>
+   
+5. Before starting the webapp, open config.py and <br>
+   edit the UPLOAD_FOLDER variable with the path to your directory of choice<br>
+   This directory will be used to store uploaded video files.<br>
 
 5. To start the webapp, enter<br>
     $ flask run<br>
