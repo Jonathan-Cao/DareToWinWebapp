@@ -1,6 +1,6 @@
 # DareToWinWebapp
 
-To install this webapp:
+To test this webapp on your own machine:
 
 1. In your terminal, navigate to the root directory and enter:<br>
     For versions of Python 3.4 and newer:<br>
