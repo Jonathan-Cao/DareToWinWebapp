@@ -1,4 +1,4 @@
-# DareToWinWebapp
+# DareToWin Webapp
 
 ## Introduction
 
