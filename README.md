@@ -49,4 +49,4 @@ To test this webapp on your own machine:
 NOTE: In the current build, the first user to register will have access to admin privileges
 
 ## Credits
-The code for this webapp is based on the <a href="https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world">Flask Tutorial by Miguel Grinberg</a>
+The code for this webapp is based on the <a href="https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world" target="_blank">Flask Tutorial by Miguel Grinberg</a>
