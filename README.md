@@ -10,8 +10,7 @@ With this webapp, registered users are able to:
 * comment on other users' dares
 * follow other users so that their dares show up on their main feed
 * report inappropriate dares and comments,<br>
-  after which an admin will review said content<br>
-  and decide whether to ban it<br>,
+  after which an admin will review said content and decide whether to ban it,<br>
   doing so will award the offending user with a demerit
 
 ## Setup
