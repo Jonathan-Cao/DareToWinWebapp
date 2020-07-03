@@ -8,7 +8,7 @@ With this webapp, registered users are able to:
 * upvote other users' dares and gain upvotes for their own
 * earn badges based on the total number of upvotes they have
 * comment on other users' dares
-* follow other users so that their dares show up on their main feed
+* follow other users so that their dares show up on your main feed
 * report inappropriate dares and comments,<br>
   after which an admin will review said content and decide whether to ban it,<br>
   doing so will award the offending user with a demerit
