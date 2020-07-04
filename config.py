@@ -20,4 +20,5 @@ class Config(object):
     POSTS_PER_PAGE = 3
     COMMENTS_PER_PAGE = 5
     
-    UPLOAD_FOLDER = "PATH_TO_UPLOAD_FOLDER"
+    UPLOAD_FOLDER = "/home/visnu/Documents/orbital/webapp/prac/darevid"
+    TOP_LEVEL = '/home/visnu/Documents/orbital/webapp/prac'
