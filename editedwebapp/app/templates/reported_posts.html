@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    <h1>Reported Posts</h1>
+    {% if not posts %}
+        <h3 style="text-align: center;">
+            There are no reported posts at the moment.<br>
+            Hooray!
+        </h3>
+    {% endif %}
+    {% for post in posts %}
+        {% include '_reported_post.html' %}
+    {% endfor %}
+    {% include '_paginate.html' %}
+{% endblock %}

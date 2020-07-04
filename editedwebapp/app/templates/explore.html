@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    <h1>Explore</h1>
+    {% if not posts %}
+        <h3 style="text-align: center;">
+            There are no posts yet :(<br>
+            Head over to Home to be the first to upload!
+        </h3>
+    {% endif %}
+    {% for post in posts %}
+        {% include '_post.html' %}
+    {% endfor %}
+    {% include '_paginate.html' %}
+{% endblock %}

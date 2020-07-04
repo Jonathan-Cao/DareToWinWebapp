@@ -1,0 +1,38 @@
+    <table class="table table-hover">
+        <tr>
+            <td width="70px">
+                <a href="{{ url_for('user', username=user.username) }}">
+                    <img src="{{ user.avatar(70) }}" />
+                </a>
+            </td>
+            <td>
+                <a href="{{ url_for('user', username=user.username) }}">
+                    {{ user.username }}
+                </a>
+            </td>
+            <td align="right">
+                <a href="{{ url_for('user_report_reasons', user_id=user.id) }}">
+                    Reasons for report
+                </a>
+                <br>
+                <p>
+                    <form action="{{ url_for('ban_profile', profile_id=user.id) }}" method="post">
+                        {{ form2.hidden_tag() }}
+                        <p>
+                        {{ form2.reason.label }}<br>
+                        {{ form2.reason(size=32) }}
+                         </p>
+                        {{ form2.submit(value='Ban') }} <!Submit button repurposed to Ban button>
+                    </form>
+                </p>
+                <br>
+                <p>
+                    <form action="{{ url_for('dismiss_case', id=user.id, prev = 'user') }}" method="post">
+                        {{ form.hidden_tag() }}
+                        {{ form.submit(value='Dismiss') }} <!Submit button repurposed to Dismiss button>
+                    </form>
+                </p>
+            </td>
+        </tr>
+    </table>
+

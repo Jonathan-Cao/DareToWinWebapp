@@ -1,0 +1,66 @@
+<table class="table table-hover">
+    <tr>
+        <td width="70px">
+            <a href="{{ url_for('user', username=post.author.username) }}">
+                <img src="{{ post.author.avatar(70) }}" />
+            </a>
+        </td>
+        <td>
+            {{ post.author.badge }}
+            <a href="{{ url_for('user', username=post.author.username) }}">
+                {{ post.author.username }}
+            </a>
+            posted on {{ moment(post.timestamp).format('LLL') }}:  
+            <br>
+            {% if post.banned %}
+                This post has been banned for the following reason: {{ post.ban_reason }}
+            {% else %} 
+                <video width="320" height="240" controls>
+                  <source src="{{ url_for('open_video', post_id=post.id) }}" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <br>
+                {{ post.body }}
+            {% endif %}
+        </td>
+        {% if not post.banned %}
+        <td align="right">
+            <a href="{{ url_for('comments', post_id=post.id, prev = request.path) }}">
+                View comments
+            </a>
+            <br>
+            <a href="{{ url_for('specific_report',id=post.id, prev = request.path, type = 'post') }}">
+                Report inappropriate content
+            </a>
+            <br>
+            {% if current_user != post.author %}
+                {% if upvote.query.filter_by(upvoter_id=current_user.id, post=post).first() %}
+                    <p>
+                        <form action="{{ url_for('vote', post_id=post.id) }}" method="post">
+                        {{ form.hidden_tag() }}
+                        {{ form.submit(value='Downvote') }} <!Submit button repurposed to Downvote button>
+                        </form>
+                    </p>
+                {% else %}
+                    <p>
+                    <form action="{{ url_for('vote', post_id=post.id) }}" method="post">
+                        {{ form.hidden_tag() }}
+                        {{ form.submit(value='Upvote') }} <!Submit button repurposed to Upvote button>
+                        </form>
+                    </p>
+                {% endif %}
+            {% endif %}
+            <div>{{ post.votes }} votes</div>
+            <br>
+            {% if current_user == post.author %}
+            <p>
+                <form action="{{ url_for('delete_post', post_id=post.id) }}" method="post">
+                    {{ form.hidden_tag() }}
+                    {{ form.submit(value='Delete post') }} <!Submit button repurposed to Delete button>
+                </form>
+            </p>
+            {% endif %}
+        </td>
+        {% endif %}
+    </tr>
+</table>

@@ -1,0 +1,37 @@
+    <table class="table table-hover">
+        <tr>
+            <td width="70px">
+                <a href="{{ url_for('user', username=comment.author.username) }}">
+                    <img src="{{ comment.author.avatar(70) }}" />
+                </a>
+            </td>
+            <td>
+                <a href="{{ url_for('user', username=comment.author.username) }}">
+                    {{ comment.author.username }}
+                </a>
+                posted on {{ moment(comment.timestamp).format('LLL') }}:
+                <br>
+                {% if comment.banned %}
+                This comment has been banned for the following reason: {{ comment.ban_reason }}
+                {% else %}
+                {{ comment.body }}
+                {% endif %}
+            </td>
+            {% if not comment.banned %}
+            <td align='right'>
+                <a href="{{ url_for('specific_report', id=comment.id, prev =request.path, type = 'comment') }}">
+                    Report inappropriate content
+                </a>
+                <br>
+                {% if current_user == comment.author %}
+                <p>
+                    <form action="{{ url_for('delete_comment', comment_id=comment.id) }}" method="post">
+                        {{ form.hidden_tag() }}
+                        {{ form.submit(value='Delete comment') }} <!Submit button repurposed to Delete button>
+                    </form>
+                </p>
+                {% endif %}
+            </td>
+            {% endif %}
+        </tr>
+    </table>
