@@ -88,9 +88,9 @@ def reported_posts():
         page = request.args.get('page', 1, type=int)
         posts = Post.query.filter(Post.reports != None).paginate(
             page, app.config['POSTS_PER_PAGE'], False)
-        next_url = url_for('reported_cases', page=posts.next_num) \
+        next_url = url_for('reported_posts', page=posts.next_num) \
             if posts.has_next else None
-        prev_url = url_for('reported_cases', page=posts.prev_num) \
+        prev_url = url_for('reported_posts', page=posts.prev_num) \
             if posts.has_prev else None
         return render_template('reported_posts.html', title='Reported Posts', posts=posts.items,
                                 form=form, form2=form2, next_url=next_url, prev_url=prev_url)
