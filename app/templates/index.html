@@ -3,13 +3,11 @@
 
 {% block app_content %}
     <h1>Hi, {{ current_user.username }}!</h1>
-    {% if form %}
     <div class="row">
         <div class="col-md-4">
-            {{ wtf.quick_form(form2) }}
+            {{ wtf.quick_form(form2, action = url_for('upload'), method = 'POST') }}
         </div>
     </div>
-    {% endif %}
     {% if not posts %}
         <h3 style="text-align: center;">
             There are no posts yet :(<br>

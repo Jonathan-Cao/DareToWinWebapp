@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    <h1>Reported Users</h1>
+    {% if not users %}
+        <h3 style="text-align: center;">
+            There are no reported users at the moment.<br>
+            Hooray!
+        </h3>
+    {% endif %}
+    {% for user in users %}
+        {% include '_reported_user.html' %}
+    {% endfor %}
+    {% include '_paginate.html' %}
+{% endblock %}

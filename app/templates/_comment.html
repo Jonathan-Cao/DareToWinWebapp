@@ -19,7 +19,7 @@
             </td>
             {% if not comment.banned %}
             <td align='right'>
-                <a href="{{ url_for('report_comment', comment_id=comment.id) }}">
+                <a href="{{ url_for('specific_report', id=comment.id, prev =request.path, type = 'comment') }}">
                     Report inappropriate content
                 </a>
                 <br>

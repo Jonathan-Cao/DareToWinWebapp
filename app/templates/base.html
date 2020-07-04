@@ -1,8 +1,11 @@
 {% extends 'bootstrap/base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
 
 {% block title %}
     {% if title %}{{ title }} - DareToWin{% else %}Welcome to DareToWin{% endif %}
 {% endblock %}
+
+
 
 {% block navbar %}
     <nav class="navbar navbar-default">
@@ -26,11 +29,29 @@
                     {% if current_user.is_anonymous %}
                     <li><a href="{{ url_for('login') }}">Login</a></li>
                     {% else %}
+                        <li><a href="{{ url_for('user', username=current_user.username) }}">Profile</a></li>
+
                         {% if current_user.id == 1 %}
-                        <li><a href="{{ url_for('reported_posts') }}">Reported Posts</a></li>
-                        <li><a href="{{ url_for('reported_comments') }}">Reported Comments</a></li>
+
+                 <li class="dropdown">
+                      <a class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        All Reports<span class='caret'></span>
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                           <a class = 'dropdown-item' href="{{ url_for('reported_users') }}">Reported Users</a>
+                           <br>
+                            <a class = 'dropdown-item' href="{{ url_for('reported_posts') }}">Reported Posts</a>
+                            <br>
+                            <a class = 'dropdown-item' href="{{ url_for('reported_comments') }}">Reported Comments</a>
+                            <br>
+                            <a class = 'dropdown-item' href="{{ url_for('reported_general') }}">General Reports</a>
+  
+                       </div>
+                   </li>
+
+                        {% else %}
+                        <li><a href="{{ url_for('general_report', prev = request.path) }}">Report</a></li>
                         {% endif %}
-                    <li><a href="{{ url_for('user', username=current_user.username) }}">Profile</a></li>
                     <li><a href="{{ url_for('logout') }}">Logout</a></li>
                     {% endif %}
                 </ul>
@@ -40,6 +61,11 @@
 {% endblock %}
 
 {% block content %}
+    {% if form0 %}
+        <div class="form-inline d-flex justify-content-center md-form form-sm mt-0" style='text-align:center'>            
+            {{ wtf.quick_form(form0, action = url_for("search"), method = 'POST') }}
+        </div>
+    {% endif %}
     <div class="container">
         {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -57,4 +83,5 @@
 {% block scripts %}
     {{ super() }} <!preserves the content from the base template>
     {{ moment.include_moment() }}
+
 {% endblock %}

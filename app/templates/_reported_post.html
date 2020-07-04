@@ -13,7 +13,7 @@
                 posted on {{ moment(post.timestamp).format('LLL') }}:  
                 <br>
                 <video width="320" height="240" controls>
-                  <source src="{{ url_for('open_video', post_dare=post.dare) }}" type="video/mp4">
+                  <source src="{{ url_for('open_video', post_id=post.id) }}" type="video/mp4">
                   Your browser does not support the video tag.
                 </video>
                 <br>
@@ -24,6 +24,9 @@
                     Reasons for report
                 </a>
                 <br>
+                <p>
+                    <a target='_blank' href='{{ url_for("comments", post_id = post.id) }}'>View full post</a>
+                </p>
                 <p>
                     <form action="{{ url_for('ban_post', post_id=post.id) }}" method="post">
                         {{ form2.hidden_tag() }}
@@ -36,7 +39,7 @@
                 </p>
                 <br>
                 <p>
-                    <form action="{{ url_for('dismiss_reported_post', post_id=post.id) }}" method="post">
+                    <form action="{{ url_for('dismiss_case', id=post.id, prev = 'post') }}" method="post">
                         {{ form.hidden_tag() }}
                         {{ form.submit(value='Dismiss') }} <!Submit button repurposed to Dismiss button>
                     </form>
