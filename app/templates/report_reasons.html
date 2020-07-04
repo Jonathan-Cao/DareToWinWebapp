@@ -3,9 +3,7 @@
 {% block app_content %}
     <h1>Reasons for report</h1>
     {% for report in reports %}
-        {% if report.seen == 0 %}
-            {% include '_reason.html' %}
-        {% endif %}
+        {% include '_reason.html' %}
     {% endfor %}
     <nav aria-label="...">
         <ul class="pager">
