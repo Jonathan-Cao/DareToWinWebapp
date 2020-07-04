@@ -88,3 +88,14 @@ class ChangePasswordForm(FlaskForm):
                 
 class EmptyForm(FlaskForm):
     submit = SubmitField('Submit')
+
+
+
+class SearchProfileForm(FlaskForm):
+    username = StringField('Profile')
+    submit = SubmitField('Submit')
+
+    def validate_username(self, username):
+        user = User.query.filter_by(username = username.data).first()
+        if user is None:
+            raise ValidationError('Username not Found')

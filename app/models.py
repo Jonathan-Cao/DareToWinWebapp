@@ -22,13 +22,19 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     upvotes = db.Column(db.Integer, default=0)
+    
     demerits = db.Column(db.Integer, default=0)
+
     badge = db.Column(db.String, default='Rookie')
     banned = db.Column(db.Integer, default=0)
     #One-to-many relationship, a user has many posts
+    votes = db.relationship('Upvote', backref = 'user', lazy = 'dynamic')
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     comments = db.relationship('Comment', backref='author', lazy='dynamic')
-    reports = db.relationship('Report', backref='author', lazy='dynamic')
+    reports = db.relationship('Report', backref='author', lazy='dynamic', foreign_keys = 'Report.reporter_id')
+####    
+    reports_on_me = db.relationship('Report', backref = 'user', lazy = 'dynamic',foreign_keys = 'Report.profile_id')
+
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     #Users followed by this user (the follower)
@@ -96,7 +102,7 @@ class User(UserMixin, db.Model):
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    dare = db.Column(db.String)
+    dare = db.Column(db.String)#filename
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -112,7 +118,9 @@ class Post(db.Model):
         
 class Upvote(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    upvoter_id = db.Column(db.Integer)
+####
+    upvoter_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
     
     def __repr__(self):
@@ -127,7 +135,17 @@ class Comment(db.Model):
     reports = db.relationship('Report', backref='comment', lazy='dynamic')
     banned = db.Column(db.Integer, default=0)
     ban_reason = db.Column(db.String(30))
-    
+   
+    #couldnt make this work, was trying to keep all reports, but change value to seen once action taken, but keeps giving error when i try to filter using this
+    def check_existing_reports(self):
+        if self.reports != None:
+            for report in self.reports:
+                if report.seen == 0:
+                    return True
+            return False
+        else:
+            return False
+
     def __repr__(self):
         return '<Comment {}>'.format(self.body)
         
@@ -135,6 +153,17 @@ class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     reason = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
     comment_id = db.Column(db.Integer, db.ForeignKey('comment.id'))
+
+    ##
+    reporter_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    profile_id = db.Column(db.Integer, db.ForeignKey('user.id'))#rpt profile
+    action_taken = db.Column(db.String(30))#action taken by admin
+ #   seen = db.Column(db.Integer, default = 0)#shld nt delete reports
+    page_of_report = db.Column(db.String(30))
+
+    def __repr__(self):
+        return 'Report by ' + str(self.author.username)   
+    
+
