@@ -458,7 +458,7 @@ def dismiss_case(id):
         report_type = request.args.get('prev')
         reports = ''
         if report_type == 'post':
-            reports = Report.query.filter_by(postid=id).all()
+            reports = Report.query.filter_by(post_id=id).all()
         elif report_type == 'comment':
             reports = Report.query.filter_by(comment_id=id).all()
         elif report_type == 'user':
@@ -553,9 +553,9 @@ def reported_posts():
      #not displaying by report, but by post#################check how
         posts = Post.query.filter(Post.reports != None).paginate(
             page, app.config['POSTS_PER_PAGE'], False)
-        next_url = url_for('reported_cases', page=posts.next_num) \
+        next_url = url_for('reported_posts', page=posts.next_num) \
             if posts.has_next else None
-        prev_url = url_for('reported_cases', page=posts.prev_num) \
+        prev_url = url_for('reported_posts', page=posts.prev_num) \
             if posts.has_prev else None
         return render_template('reported_posts.html', title='Reported Posts', posts=posts.items,
                                 form=form, form2=form2, next_url=next_url, prev_url=prev_url, form0 = form0)
@@ -572,9 +572,9 @@ def reported_comments():
         page = request.args.get('page', 1, type=int)
         comments = Comment.query.filter(Comment.reports != None).paginate(
             page, app.config['POSTS_PER_PAGE'], False)
-        next_url = url_for('reported_cases', page=comments.next_num) \
+        next_url = url_for('reported_comments', page=comments.next_num) \
             if comments.has_next else None
-        prev_url = url_for('reported_cases', page=comments.prev_num) \
+        prev_url = url_for('reported_comments', page=comments.prev_num) \
             if comments.has_prev else None
         return render_template('reported_comments.html', title='Reported Comments', 
                                 comments=comments.items, form=form, form2=form2, 
@@ -592,9 +592,9 @@ def reported_users():
         page = request.args.get('page', 1, type=int)
         users = User.query.filter(User.reports_on_me != None).paginate(
             page, app.config['POSTS_PER_PAGE'], False)
-        next_url = url_for('reported_cases', page=users.next_num) \
+        next_url = url_for('reported_users', page=users.next_num) \
             if users.has_next else None
-        prev_url = url_for('reported_cases', page=users.prev_num) \
+        prev_url = url_for('reported_users', page=users.prev_num) \
             if users.has_prev else None
         return render_template('reported_users.html', title='Reported Users', 
                                 users=users.items, form=form, form2=form2, 
@@ -641,7 +641,7 @@ def comment_report_reasons(comment_id):
     if current_user.id == 1:
         comment = Comment.query.filter_by(id=comment_id).first_or_404() 
         page = request.args.get('page', 1, type=int)    
-        reports = Report.query.order_by(Report.timestamp.desc()).filter_by(comment=comment, seen = 0).paginate(
+        reports = Report.query.order_by(Report.timestamp.desc()).filter_by(comment=comment).paginate(
             page, app.config['COMMENTS_PER_PAGE'], False)
              
         next_url = url_for('report_reasons', post_id=post.id, page=reports.next_num) \
