@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, request, url_for, send_from_directory, abort
 import os
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, ResetPasswordRequestForm, ResetPasswordForm, EditProfileForm, ChangePasswordForm, EmptyForm, PostForm, CommentForm, ReportForm, BanForm
+from app.forms import LoginForm, RegistrationForm, ResetPasswordRequestForm, ResetPasswordForm, EditProfileForm, ChangePasswordForm, EmptyForm, PostForm, CommentForm, ReportForm, BanForm, SearchProfileForm
 from app.email import send_password_reset_email
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Post, Comment, Upvote, Report
@@ -12,6 +12,7 @@ from datetime import datetime
 @app.route('/explore')
 @login_required
 def explore():
+    form0 = SearchProfileForm()
     form = EmptyForm()
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.timestamp.desc()).filter_by(banned=0).paginate(
@@ -22,7 +23,7 @@ def explore():
         if posts.has_prev else None
     if current_user.banned:
         return render_template('banned.html')
-    return render_template('explore.html', title='Explore', form=form, posts=posts.items,
+    return render_template('explore.html', title='Explore', form=form, form0=form0, posts=posts.items,
                             upvote=Upvote, next_url=next_url, prev_url=prev_url)
                             
 @app.route('/leaderboard')
@@ -40,14 +41,16 @@ def leaderboard():
     start_num = int(page_num) * app.config['POSTS_PER_PAGE'] - app.config['POSTS_PER_PAGE'] + 1
     if current_user.banned:
         return render_template('banned.html')
-    return render_template('leaderboard.html', title='Leaderboard', form=form, posts=posts.items,
-                            upvote=Upvote, next_url=next_url, prev_url=prev_url, start_num=start_num)
+    return render_template('leaderboard.html', title='Leaderboard', form=form, form0=form0,
+                            posts=posts.items, upvote=Upvote, next_url=next_url, 
+                            prev_url=prev_url, start_num=start_num)
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
     #Submit post
+    form0 = SearchProfileForm()
     form = EmptyForm()
     form2 = PostForm()
     if form.validate_on_submit():
@@ -55,7 +58,8 @@ def index():
         post = Post(body=form2.post.data, author=current_user)     
         db.session.add(post)
         post = Post.query.order_by(Post.timestamp.desc()).first()
-        filename = secure_filename("{}_{}".format(str(post.author), str(post.id)))
+        filename = secure_filename("{}_{}_{}".format(
+                    str(post.author.id), str(post.author), str(post.id)))
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         #path = str(app.config['UPLOAD_FOLDER'] + "/" + filename)
         post.dare = filename
@@ -75,7 +79,7 @@ def index():
         if posts.has_prev else None
     if current_user.banned:
         return render_template('banned.html')
-    return render_template('index.html', title='Home', form=form, form2=form2,
+    return render_template('index.html', title='Home', form=form, form2=form2, form0=form0,
                             posts=posts.items, upvote=Upvote,
                             next_url=next_url, prev_url=prev_url)
                             
@@ -253,27 +257,33 @@ def delete_post(post_id):
         for upvote in upvotes:
             db.session.delete(upvote)
         for report in reports:
-            db.session.delete(report)
+            db.session.delete(report) 
         assign_badge(post.author)
         db.session.delete(post)
         db.session.commit()
         flash('Your post has been deleted!')
-        #return redirect(url_for('index'))
         return redirect(request.referrer)
     else: #CSRF token missing or invalid
-        return redirect(url_for('index'))
+        return redirect(request.referrer)
         
-@app.route('/report_post/<post_id>', methods=['GET', 'POST'])
+@app.route('/specific_report/<id>', methods=['GET', 'POST'])
 @login_required                            
-def report_post(post_id):
+def specific_report(id):
     form = ReportForm()
     if form.validate_on_submit():
-        report = Report(reason=form.reason.data, user_id=current_user.id, post_id=post_id)
+        prev_url = request.args.get('prev')
+        report_type = request.args.get('type')
+        if url_parse(prev_url).netloc != '':
+            return redirect('index')
+        if report_type.find('post') != -1:
+            report = Report(reason=form.reason.data, user_id=current_user.id, post_id=id)
+        else:
+            report = Report(reason=form.reason.data, user_id=current_user.id, comment_id=id)
         db.session.add(report)
         db.session.commit()
         flash('Thanks for your feedback!')
-        return redirect(request.referrer)
-    return render_template('report.html', title='Report post',
+        return redirect(prev_url)
+    return render_template('report.html', title='Report',
                            form=form)
                            
 @app.route('/report_comment/<comment_id>', methods=['GET', 'POST'])
@@ -411,10 +421,22 @@ def register():
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
+    
+@app.route('/search', methods = ['POST'])
+@login_required
+def search():
+    form0 = SearchProfileForm()
+    if form0.validate_on_submit():
+        user = User.query.filter_by(username = form0.username.data).first()
+        if user is not None:
+            return redirect(url_for('user', username = user.username))
+    flash('Invalid Username')
+    return redirect(request.referrer)
 
 @app.route('/user/<username>') #Profile
 @login_required
 def user(username):
+    form0 = SearchProfileForm()
     form = EmptyForm() #Follow/Unfollow button
     form2 = BanForm()
     user = User.query.filter_by(username=username).first_or_404()
@@ -427,8 +449,8 @@ def user(username):
         if posts.has_prev else None
     if user.banned and current_user.id != 1:
         return render_template('banned.html')
-    return render_template('user.html', user=user, posts=posts.items, form=form, form2=form2, 
-                            upvote=Upvote, next_url=next_url, prev_url=prev_url)
+    return render_template('user.html', user=user, form=form, form2=form2, form0=form0,
+                            posts=posts.items, upvote=Upvote, next_url=next_url, prev_url=prev_url)
 
 @app.route('/reset_password_request', methods=['GET', 'POST'])
 def reset_password_request():
@@ -500,6 +522,36 @@ def change_password():
         flash('Password changed successfully')
         return redirect(next_page)
     return render_template('change_password.html', title='Change password', form=form)
+    
+@app.route('/following/<username>', methods=['GET', 'POST'])
+@login_required
+def following(username):
+    form = EmptyForm()
+    user = User.query.filter_by(username=username).first_or_404()
+    page = request.args.get('page', 1, type=int)
+    following = user.followed.paginate(
+        page, app.config['COMMENTS_PER_PAGE'], False)
+    next_url = url_for('following', username=user.username, page=following.next_num) \
+        if following.has_next else None
+    prev_url = url_for('following', username=user.username, page=following.prev_num) \
+        if following.has_prev else None
+    return render_template('following.html', form=form, user=user, following=following.items,
+                            next_url=next_url, prev_url=prev_url)
+    
+@app.route('/followers/<username>', methods=['GET', 'POST'])
+@login_required
+def followers(username):
+    form = EmptyForm()
+    user = User.query.filter_by(username=username).first_or_404()
+    page = request.args.get('page', 1, type=int)
+    followers = user.followers.paginate(
+        page, app.config['COMMENTS_PER_PAGE'], False)
+    next_url = url_for('followers', username=user.username, page=followers.next_num) \
+        if followers.has_next else None
+    prev_url = url_for('followers', username=user.username, page=followers.prev_num) \
+        if followers.has_prev else None
+    return render_template('followers.html', form=form, user=user, followers=followers.items,
+                            next_url=next_url, prev_url=prev_url)
                            
 @app.route('/follow/<username>', methods=['POST'])
 @login_required
@@ -516,7 +568,7 @@ def follow(username):
         current_user.follow(user)
         db.session.commit()
         flash('You are now following {}!'.format(username))
-        return redirect(url_for('user', username=username))
+        return redirect(request.referrer)
     else: #CSRF token missing or invalid
         return redirect(url_for('index'))
 
@@ -536,6 +588,6 @@ def unfollow(username):
         current_user.unfollow(user)
         db.session.commit()
         flash('You are no longer following {}.'.format(username))
-        return redirect(url_for('user', username=username))
+        return redirect(request.referrer)
     else: #CSRF token missing or invalid
         return redirect(url_for('index'))
