@@ -29,6 +29,7 @@ def explore():
 @app.route('/leaderboard')
 @login_required
 def leaderboard():
+    form0 = SearchProfileForm()
     form = EmptyForm()
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.votes.desc()).filter_by(banned=0).paginate(
