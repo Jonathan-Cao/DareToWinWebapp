@@ -33,9 +33,9 @@ To test this webapp on your own machine:
     
 4. Enter the following commands to initialise the db database file<br>
     ```
-    $ flask db init<br>
-    $ flask db migrate -m "initial_migration"<br>
-    $ flask db upgrade<br>
+    $ flask db init
+    $ flask db migrate -m "initial_migration"
+    $ flask db upgrade
     ```
    You should see a new file named app.db in the root directory<br>
    
