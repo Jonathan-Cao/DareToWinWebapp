@@ -12,7 +12,10 @@
                 {% endif %}
                 <p>{{ user.upvotes }} points</p>
                 <p>{{ user.demerits }} demerits</p>
-                <p>{{ user.followers.count() }} followers, {{ user.followed.count() }} following.</p>
+                <p>{{ user.followers.count() }}
+                <a href="{{ url_for('followers', username=user.username) }}">followers</a>, 
+                {{ user.followed.count() }} 
+                <a href="{{ url_for('following', username=user.username) }}">following</a></p>
                 {% if user == current_user %}
                 <p><a href="{{ url_for('edit_profile') }}">Edit your profile</a></p>
                 <p><a href="{{ url_for('change_password') }}">Change password</a></p>
@@ -38,18 +41,5 @@
     {% for post in posts %}
         {% include '_post.html' %} <!To include sub-template _post.html>
     {% endfor %}
-    <nav aria-label="...">
-        <ul class="pager">
-            <li class="previous{% if not prev_url %} disabled{% endif %}">
-                <a href="{{ prev_url or '#' }}">
-                    <span aria-hidden="true">&larr;</span> Newer posts
-                </a>
-            </li>
-            <li class="next{% if not next_url %} disabled{% endif %}">
-                <a href="{{ next_url or '#' }}">
-                    Older posts <span aria-hidden="true">&rarr;</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+    {% include '_paginate.html' %}
 {% endblock %}

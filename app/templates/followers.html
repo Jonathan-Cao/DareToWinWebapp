@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    <h1>Users following {{ user.username }}</h1>
+    {% if not followers %}
+        <h3 style="text-align: center;">
+            {{ user.username }} is not followed by anyone
+        </h3>
+    {% endif %}
+    {% for followed in followers %}
+        {% include '_follow.html' %}
+    {% endfor %}
+    {% include '_paginate.html' %}
+{% endblock %}

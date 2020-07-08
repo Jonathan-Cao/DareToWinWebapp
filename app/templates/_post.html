@@ -29,7 +29,7 @@
                     View comments
                 </a>
                 <br>
-                <a href="{{ url_for('report_post', post_id=post.id) }}">
+                <a href="{{ url_for('specific_report', id=post.id, prev=request.path, type='post') }}">
                     Report inappropriate content
                 </a>
                 <br>

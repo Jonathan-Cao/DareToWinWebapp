@@ -24,6 +24,10 @@
                     Reasons for report
                 </a>
                 <br>
+                <a href="{{ url_for('comments', post_id=post.id) }}">
+                View full post
+                </a>
+                <br>
                 <p>
                     <form action="{{ url_for('ban_post', post_id=post.id) }}" method="post">
                         {{ form2.hidden_tag() }}
