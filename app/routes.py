@@ -285,19 +285,6 @@ def specific_report(id):
         return redirect(prev_url)
     return render_template('report.html', title='Report',
                            form=form)
-                           
-@app.route('/report_comment/<comment_id>', methods=['GET', 'POST'])
-@login_required                            
-def report_comment(comment_id):
-    form = ReportForm()
-    if form.validate_on_submit():
-        report = Report(reason=form.reason.data, user_id=current_user.id, comment_id=comment_id)
-        db.session.add(report)
-        db.session.commit()
-        flash('Thanks for your feedback!')
-        return redirect(request.referrer)
-    return render_template('report.html', title='Report post',
-                           form=form)
 
 @app.route('/upvote/<post_id>', methods=['POST'])
 @login_required
@@ -312,7 +299,6 @@ def upvote(post_id):
         post.votes += 1
         assign_badge(post.author)
         db.session.commit()
-        #return redirect(url_for('index'))
         flash('Upvoted! :)')
         return redirect(request.referrer)
         
@@ -329,9 +315,7 @@ def downvote(post_id):
         post.votes -= 1
         assign_badge(post.author)
         db.session.commit()
-        #return redirect(url_for('index'))
         flash('Downvoted! :(')
-        #return redirect(url_for('index'))
         return redirect(request.referrer)
 
 @app.route('/comments/<post_id>', methods=['GET', 'POST'])
@@ -395,7 +379,6 @@ def login():
         if not next_page or url_parse(next_page).netloc != '': #Security reasons
             next_page = url_for('index')
         return redirect(next_page)
-        #return redirect(url_for('index'))
         """
         flash('Login requested for user {}, remember_me={}'.format(
             form.username.data, form.remember_me.data))
