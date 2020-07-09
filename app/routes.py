@@ -97,7 +97,7 @@ def reported_general():
 	prev_url = url_for('reported_general', page = reports.prev_num)\
 	    if reports.has_prev else None
 	return render_template('reported_general.html', reports = reports.items, form = form, 
-				prev_url = prev_url, next_url = next_url, title = 'Reported General', form0 = form0)
+	                        prev_url = prev_url, next_url = next_url, title = 'Reported General', form0 = form0)
     return render_template('admin_restricted.html')
                             
 @app.route('/reported_posts', methods=['GET', 'POST'])
