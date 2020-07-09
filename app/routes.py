@@ -84,6 +84,20 @@ def index():
                             posts=posts.items, upvote=Upvote,
                             next_url=next_url, prev_url=prev_url)
                             
+@app.route('/reported_general', methods = ['GET', 'POST'])
+@login_required
+def reported_general():
+    form0 = SearchProfileForm()
+    form = EmptyForm()
+    form2 = ReportForm()
+    page = request.args.get('page', 1, type = int)
+    reports = Report.query.filter(Report.page_of_report != None).paginate(page, app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('reported_general', page = reports.next_num)\
+    if reports.has_next else None
+    prev_url = url_for('reported_general', page = reports.prev_num)\
+    if reports.has_prev else None
+    return render_template('reported_general.html', reports = reports.items, form = form, prev_url = prev_url, next_url = next_url, title = 'Reported General', form0 = form0, form2 = form2)
+                            
 @app.route('/reported_posts', methods=['GET', 'POST'])
 @login_required
 def reported_posts():
@@ -235,16 +249,15 @@ def ban_profile(profile_id):
     if form.validate_on_submit():
         reports = Report.query.filter_by(profile_id=profile_id).all()
         profile = User.query.filter_by(id=profile_id).first_or_404()
-        profile.about_me = "About me removed due to: {}".format(form.reason.data)
+        profile.banned = 1
         profile.ban_reason = form.reason.data
-        profile.demerits += 1
         for report in reports:
             db.session.delete(report)
         db.session.commit()
         flash("Case resolved")
         return redirect(request.referrer)
     return redirect(url_for('index'))
-    
+
 @app.route('/dismiss_case/<id>', methods=['POST'])
 @login_required
 def dismiss_case(id):
@@ -333,10 +346,25 @@ def specific_report(id):
             report = Report(reason=form.reason.data, author=current_user, profile_id=id)
         db.session.add(report)
         db.session.commit()
-        flash('Thanks for your feedback!')
+        flash('Your report has been submitted. Thank you for your feedback!')
         return redirect(prev_url)
-    return render_template('report.html', title='Report',
+    return render_template('specific_report.html', title='Report',
                            form=form)
+                           
+@app.route('/general_report', methods = ['GET', 'POST'])
+@login_required
+def general_report():
+    form = ReportForm()
+    if form.validate_on_submit():
+        prev_url = request.args.get('prev')
+        if url_parse(prev_url).netloc != '':
+            return redirect(url_for('index'))
+        report = Report(reason = form.reason.data, page_of_report = prev_url, author = current_user)
+        db.session.add(report)
+        db.session.commit()
+        flash('Your report has been submitted. Thank you for your feedback!')
+        return redirect(prev_url)
+    return render_template('general_report.html', form = form, title = 'Report')
 
 @app.route('/upvote/<post_id>', methods=['POST'])
 @login_required

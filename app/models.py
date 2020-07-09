@@ -139,6 +139,10 @@ class Report(db.Model):
     reason = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     reporter_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    profile_id = db.Column(db.Integer, db.ForeignKey('user.id')) #report on user's About Me
+    profile_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
     comment_id = db.Column(db.Integer, db.ForeignKey('comment.id'))
+    page_of_report = db.Column(db.String(30))
+    
+    def __repr__(self):
+        return 'Report by ' + str(self.author.username)
