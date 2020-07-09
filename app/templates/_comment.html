@@ -21,7 +21,7 @@
             {% if not comment.banned %}
             <td align='right'>
                 <a href="{{ url_for('specific_report', id=comment.id, prev=request.path, type='comment') }}">
-                    Report inappropriate content
+                    Report inappropriate comment
                 </a>
                 <br>
                 {% if current_user == comment.author %}

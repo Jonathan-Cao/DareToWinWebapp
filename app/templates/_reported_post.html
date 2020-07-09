@@ -40,7 +40,7 @@
                 </p>
                 <br>
                 <p>
-                    <form action="{{ url_for('dismiss_reported_post', post_id=post.id) }}" method="post">
+                    <form action="{{ url_for('dismiss_case', id=post.id, type='post') }}" method="post">
                         {{ form.hidden_tag() }}
                         {{ form.submit(value='Dismiss') }} <!Submit button repurposed to Dismiss button>
                     </form>

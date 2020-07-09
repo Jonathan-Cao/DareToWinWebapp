@@ -28,10 +28,34 @@
                     <li><a href="{{ url_for('login') }}">Login</a></li>
                     {% else %}
                         {% if current_user.id == 1 %}
-                        <li><a href="{{ url_for('reported_posts') }}">Reported Posts</a></li>
-                        <li><a href="{{ url_for('reported_comments') }}">Reported Comments</a></li>
+                        <li class="dropdown">
+                        <a class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        All Reports<span class='caret'></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li>
+                                <a class='dropdown-item' href="{{ url_for('reported_users') }}">
+                                Reported Users
+                                </a>
+                            </li>
+                            <li>
+                                <a class='dropdown-item' href="{{ url_for('reported_posts') }}">
+                                Reported Posts
+                                </a>
+                            </li>
+                            <li>
+                                <a class='dropdown-item' href="{{ url_for('reported_comments') }}">
+                                Reported Comments
+                                </a>
+                            </li>
+                        </ul>
+                        </li>
                         {% endif %}
-                    <li><a href="{{ url_for('user', username=current_user.username) }}">{{ current_user.username }}'s Profile</a></li>
+                    <li>
+                        <a href="{{ url_for('user', username=current_user.username) }}">
+                        {{ current_user.username }}'s Profile
+                        </a>
+                    </li>
                     <li><a href="{{ url_for('logout') }}">Logout</a></li>
                     {% endif %}
                 </ul>
