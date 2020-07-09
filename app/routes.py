@@ -356,7 +356,7 @@ def specific_report(id):
 @app.route('/general_report', methods = ['GET', 'POST'])
 @login_required
 def general_report():
-    form0= SearchProfileForm()
+    form0 = SearchProfileForm()
     form = ReportForm()
     if form.validate_on_submit():
         prev_url = request.args.get('prev')
