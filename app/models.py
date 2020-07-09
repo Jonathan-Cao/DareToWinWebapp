@@ -159,7 +159,7 @@ class Report(db.Model):
     ##
     reporter_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     profile_id = db.Column(db.Integer, db.ForeignKey('user.id'))#rpt profile
-    action_taken = db.Column(db.String(30))#action taken by admin
+ #   action_taken = db.Column(db.String(30))#action taken by admin
  #   seen = db.Column(db.Integer, default = 0)#shld nt delete reports
     page_of_report = db.Column(db.String(30))
 
