@@ -607,14 +607,14 @@ def reported_users():
 def reported_general():
     form0 = SearchProfileForm()
     form = EmptyForm()
-    form2 = ReportForm()
+    #form2 = ReportForm()
     page = request.args.get('page', 1, type = int)
     reports = Report.query.filter(Report.page_of_report != None).paginate(page, app.config['POSTS_PER_PAGE'], False)
     next_url = url_for('reported_general', page = reports.next_num)\
     if reports.has_next else None
     prev_url = url_for('reported_general', page = reports.prev_num)\
     if reports.has_prev else None
-    return render_template('reported_gen.html', reports = reports.items, form = form, prev_url = prev_url, next_url = next_url, title = 'Reported General', form0 = form0, form2 = form2)#####havent make
+    return render_template('reported_gen.html', reports = reports.items, form = form, prev_url = prev_url, next_url = next_url, title = 'Reported General', form0 = form0)
 
 
 @app.route('/post_report_reasons/<post_id>', methods=['GET'])
