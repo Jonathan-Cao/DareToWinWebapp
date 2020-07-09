@@ -529,6 +529,7 @@ def ban_profile(profile_id):
         return redirect(request.referrer)
     return redirect(url_for('index'))
 
+#no need ready
 @app.route('/action/<id>', methods=['POST'])
 @login_required
 def action(id):
