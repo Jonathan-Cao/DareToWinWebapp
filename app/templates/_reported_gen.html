@@ -17,6 +17,7 @@
                 </p>
             </td>
             <td align="right">
+                '''
                 <p>
                     <form action="{{ url_for('action', id=report.id) }}" method="post">
                         {{ form2.hidden_tag() }}
@@ -28,6 +29,7 @@
                     </form>
                 </p>
                 <br>
+                '''
                 <p>
                     <form action="{{ url_for('dismiss_case', id = report.id) }}" method="post">
                         {{ form.hidden_tag() }}
