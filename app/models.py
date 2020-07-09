@@ -28,7 +28,10 @@ class User(UserMixin, db.Model):
     #One-to-many relationship, a user has many posts
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     comments = db.relationship('Comment', backref='author', lazy='dynamic')
-    reports = db.relationship('Report', backref='author', lazy='dynamic')
+    reports = db.relationship('Report', backref='author', lazy='dynamic', 
+                                foreign_keys = 'Report.reporter_id')
+    reports_on_me = db.relationship('Report', backref = 'user', lazy = 'dynamic',
+                                    foreign_keys = 'Report.profile_id')
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     #Users followed by this user (the follower)
@@ -135,6 +138,7 @@ class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     reason = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    reporter_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    profile_id = db.Column(db.Integer, db.ForeignKey('user.id')) #report on user's About Me
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
     comment_id = db.Column(db.Integer, db.ForeignKey('comment.id'))

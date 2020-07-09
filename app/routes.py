@@ -87,6 +87,7 @@ def index():
 @app.route('/reported_posts', methods=['GET', 'POST'])
 @login_required
 def reported_posts():
+    form0 = SearchProfileForm()
     form = EmptyForm()
     form2 = BanForm()
     if current_user.id == 1:
@@ -98,7 +99,8 @@ def reported_posts():
         prev_url = url_for('reported_posts', page=posts.prev_num) \
             if posts.has_prev else None
         return render_template('reported_posts.html', title='Reported Posts', posts=posts.items,
-                                form=form, form2=form2, next_url=next_url, prev_url=prev_url)
+                                form=form, form2=form2, form0=form0,
+                                next_url=next_url, prev_url=prev_url)
     return render_template('admin_restricted.html')
                             
 @app.route('/post_report_reasons/<post_id>', methods=['GET'])
@@ -118,18 +120,6 @@ def post_report_reasons(post_id):
         return render_template('report_reasons.html', title='Reasons for report',
                                 reports=reports.items)
     return render_template('admin_restricted.html')
-    
-@app.route('/dismiss_reported_post/<post_id>', methods=['POST'])
-@login_required
-def dismiss_reported_post(post_id):
-    form = EmptyForm()
-    if form.validate_on_submit():
-        reports = Report.query.filter_by(post_id=post_id).all()
-        for report in reports:
-            db.session.delete(report)
-        db.session.commit()
-        flash("Case dismissed")
-        return redirect(request.referrer)
         
 @app.route('/ban_post/<post_id>', methods=['POST'])
 @login_required
@@ -145,8 +135,6 @@ def ban_post(post_id):
         assign_badge(post.author)
         for report in reports:
             db.session.delete(report)
-        if post.author.demerits > 1:
-            post.author.banned = 1
         db.session.commit()
         flash("Case resolved")
         return redirect(request.referrer)
@@ -154,6 +142,7 @@ def ban_post(post_id):
 @app.route('/reported_comments', methods=['GET', 'POST'])
 @login_required
 def reported_comments():
+    form0 = SearchProfileForm()
     form = EmptyForm()
     form2 = BanForm()
     if current_user.id == 1:
@@ -165,7 +154,7 @@ def reported_comments():
         prev_url = url_for('reported_cases', page=comments.prev_num) \
             if comments.has_prev else None
         return render_template('reported_comments.html', title='Reported Posts', 
-                                comments=comments.items, form=form, form2=form2, 
+                                comments=comments.items, form=form, form2=form2, form0=form0,
                                 next_url=next_url, prev_url=prev_url)
     return render_template('admin_restricted.html')
     
@@ -187,18 +176,6 @@ def comment_report_reasons(comment_id):
                                 reports=reports.items)
     return render_template('admin_restricted.html')
 
-@app.route('/dismiss_reported_comment/<comment_id>', methods=['POST'])
-@login_required
-def dismiss_reported_comment(comment_id):
-    form = EmptyForm()
-    if form.validate_on_submit():
-        reports = Report.query.filter_by(comment_id=comment_id).all()
-        for report in reports:
-            db.session.delete(report)
-        db.session.commit()
-        flash("Case dismissed")
-        return redirect(request.referrer)
-
 @app.route('/ban_comment/<comment_id>', methods=['POST'])
 @login_required
 def ban_comment(comment_id):
@@ -211,10 +188,82 @@ def ban_comment(comment_id):
         comment.author.demerits += 1
         for report in reports:
             db.session.delete(report)
-        if comment.author.demerits > 1:
-            comment.author.banned = 1
         db.session.commit()
         flash("Case resolved")
+        return redirect(request.referrer)
+        
+@app.route('/reported_users', methods=['GET', 'POST'])
+@login_required
+def reported_users():
+    form0 = SearchProfileForm()
+    form = EmptyForm()
+    form2 = BanForm()
+    if current_user.id == 1:
+        page = request.args.get('page', 1, type=int)
+        users = User.query.filter(User.reports_on_me != None).paginate(
+            page, app.config['POSTS_PER_PAGE'], False)
+        next_url = url_for('reported_users', page=users.next_num) \
+            if users.has_next else None
+        prev_url = url_for('reported_users', page=users.prev_num) \
+            if users.has_prev else None
+        return render_template('reported_users.html', title='Reported Users', 
+                                users=users.items, form=form, form2=form2, 
+                                next_url=next_url, prev_url=prev_url, form0 = form0)
+    return render_template('admin_restricted.html')
+    
+@app.route('/user_report_reasons/<user_id>', methods=['GET'])
+@login_required
+def user_report_reasons(user_id):
+    if current_user.id == 1:
+        user = User.query.filter_by(id=user_id).first_or_404() 
+        page = request.args.get('page', 1, type=int)    
+        reports = Report.query.order_by(Report.timestamp.desc()).filter_by(user=user).paginate(
+            page, app.config['POSTS_PER_PAGE'], False)
+             
+        next_url = url_for('report_reasons', post_id=post.id, page=reports.next_num) \
+            if reports.has_next else None
+        prev_url = url_for('report_reasons', post_id=post.id, page=reports.prev_num) \
+            if reports.has_prev else None
+
+        return render_template('report_reasons.html', title='Reasons for report', reports=reports.items)
+    return render_template('admin_restricted.html')
+    
+@app.route('/ban_profile/<profile_id>', methods = ['POST'])
+@login_required
+def ban_profile(profile_id):
+    form = BanForm()
+    if form.validate_on_submit():
+        reports = Report.query.filter_by(profile_id=profile_id).all()
+        profile = User.query.filter_by(id=profile_id).first_or_404()
+        profile.about_me = "About me removed due to: {}".format(form.reason.data)
+        profile.ban_reason = form.reason.data
+        profile.demerits += 1
+        for report in reports:
+            db.session.delete(report)
+        db.session.commit()
+        flash("Case resolved")
+        return redirect(request.referrer)
+    return redirect(url_for('index'))
+    
+@app.route('/dismiss_case/<id>', methods=['POST'])
+@login_required
+def dismiss_case(id):
+    form = EmptyForm()
+    if form.validate_on_submit():
+        report_type = request.args.get('type')
+        reports = ''
+        if report_type == 'post':
+            reports = Report.query.filter_by(post_id=id).all()
+        elif report_type == 'comment':
+            reports = Report.query.filter_by(comment_id=id).all()
+        elif report_type == 'user':
+            reports = Report.query.filter_by(profile_id = id).all()
+        else:
+            reports = Report.query.filter_by(id=id).all()
+        for report in reports:
+            db.session.delete(report)
+        db.session.commit()
+        flash("Case dismissed")
         return redirect(request.referrer)
 
 @app.route('/open_video/<post_dare>')
@@ -277,9 +326,11 @@ def specific_report(id):
         if url_parse(prev_url).netloc != '':
             return redirect('index')
         if report_type.find('post') != -1:
-            report = Report(reason=form.reason.data, user_id=current_user.id, post_id=id)
+            report = Report(reason=form.reason.data, author=current_user, post_id=id)
+        elif report_type.find('comment') != -1:
+            report = Report(reason=form.reason.data, author=current_user, comment_id=id)
         else:
-            report = Report(reason=form.reason.data, user_id=current_user.id, comment_id=id)
+            report = Report(reason=form.reason.data, author=current_user, profile_id=id)
         db.session.add(report)
         db.session.commit()
         flash('Thanks for your feedback!')
@@ -483,7 +534,7 @@ def edit_profile():
         current_user.about_me = form.about_me.data
         db.session.commit()
         flash('Your changes have been saved.')
-        return redirect(url_for('edit_profile'))
+        return redirect(url_for('user', username=current_user.username))
     elif request.method == 'GET': #Before submit button is clicked
         form.username.data = current_user.username
         form.about_me.data = current_user.about_me
