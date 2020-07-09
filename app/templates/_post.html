@@ -30,7 +30,7 @@
                 </a>
                 <br>
                 <a href="{{ url_for('specific_report', id=post.id, prev=request.path, type='post') }}">
-                    Report inappropriate content
+                    Report inappropriate post
                 </a>
                 <br>
                 {% if current_user != post.author %}
