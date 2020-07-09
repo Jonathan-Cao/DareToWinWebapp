@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block app_content %}
+    <h1>General Reports</h1>
+    {% if not reports %}
+        <h3 style="text-align: center;">
+            There are no general reports at the moment.<br>
+            Hooray!
+        </h3>
+    {% endif %}
+    {% for report in reports %}
+        {% include '_reported_general.html' %}
+    {% endfor %}
+    {% include '_paginate.html' %}
+{% endblock %}

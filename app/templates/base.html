@@ -48,7 +48,17 @@
                                 Reported Comments
                                 </a>
                             </li>
+                            <li>
+                                <a class='dropdown-item' href="{{ url_for('reported_general') }}">
+                                General Reports</a>
+                            </li>
                         </ul>
+                        </li>
+                        {% else %}
+                        <li>
+                            <a href="{{ url_for('general_report', prev = request.path) }}">
+                                Report page
+                            </a>
                         </li>
                         {% endif %}
                     <li>
@@ -61,10 +71,10 @@
                 </ul>
             </div>
             {% if form0 %}
-            <div class="form-inline d-flex justify-content-center md-form form-sm mt-0" style='text-align:center'>            
-            {{ wtf.quick_form(form0, action = url_for("search"), method = 'POST') }}
-            </div>
-    {% endif %}
+                <div class="form-inline d-flex justify-content-center md-form form-sm mt-0" style='text-align:center'>            
+                {{ wtf.quick_form(form0, action = url_for("search"), method = 'POST') }}
+                </div>
+            {% endif %}
         </div>
     </nav>
 {% endblock %}

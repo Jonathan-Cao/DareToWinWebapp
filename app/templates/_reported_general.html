@@ -1,0 +1,28 @@
+    <table class="table table-hover">
+        <tr>
+            <td width="70px">
+                <a href="{{ url_for('user', username=report.author.username) }}">
+                    <img src="{{ report.author.avatar(70) }}" />
+                </a>
+            </td>
+            <td>
+                <a href="{{ url_for('user', username=report.author.username) }}">
+                    {{ report.user.username }}
+                </a>
+                <p>
+                    {{ report.reason }}
+                </p>
+                <p>
+                    <a href="{{ report.page_of_report }}">View Issue</a>
+                </p>
+            </td>
+            <td align="right">
+                <p>
+                    <form action="{{ url_for('dismiss_case', id = report.id) }}" method="post">
+                        {{ form.hidden_tag() }}
+                        {{ form.submit(value='Dismiss') }} <!Submit button repurposed to Dismiss button>
+                    </form>
+                </p>
+            </td>
+        </tr>
+    </table>

@@ -8,11 +8,6 @@
                 <h1>{{ user.badge }} {{ user.username }}</h1>
                 {% if user.about_me %}
                 <p>{{ user.about_me }}</p>
-                <p>
-                <a href="{{ url_for('specific_report', id=user.id, prev=request.path, type = 'profile') }}">
-                    Report inappropriate bio
-                </a>
-                </p>
                 {% endif %}
                 {% if user.last_seen %}
                 <p>Last seen on: {{ moment(user.last_seen).format('LLL') }}</p>
@@ -41,6 +36,11 @@
                     </form>
                 </p>
                 {% endif %}
+                <p>
+                <a href="{{ url_for('specific_report', id=user.id, prev=request.path, type = 'profile') }}">
+                    Report inappropriate content
+                </a>
+                </p>
             </td>
         </tr>
     </table>
