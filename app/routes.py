@@ -356,6 +356,7 @@ def specific_report(id):
 @app.route('/general_report', methods = ['GET', 'POST'])
 @login_required
 def general_report():
+    form0= SearchProfileForm()
     form = ReportForm()
     if form.validate_on_submit():
         prev_url = request.args.get('prev')
@@ -366,7 +367,7 @@ def general_report():
         db.session.commit()
         flash('Your report has been submitted. Thank you for your feedback!')
         return redirect(prev_url)
-    return render_template('general_report.html', form = form, title = 'Report')
+    return render_template('general_report.html', form = form, form0=form0, title='Report')
 
 @app.route('/upvote/<post_id>', methods=['POST'])
 @login_required
