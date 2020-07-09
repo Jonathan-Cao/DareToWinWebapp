@@ -18,11 +18,14 @@ With this webapp, registered users are able to:
 To test this webapp on your own machine:
 
 1. In your terminal, navigate to the root directory of the webapp and enter:<br>
-    For versions of Python 3.4 and newer:<br>
-    `$ python3 -m venv venv`<br>
-    Alternatively, for versions of Python older than 3.4 that do not support virtual environments natively:<br>
+    For Python 3:<br>
     ```
-    $ sudo pip install virtualenv
+    $ sudo apt-get install python3-venv
+    $ python3 -m venv venv
+    ```
+    Alternatively, for versions of Python older than 3:<br>
+    ```
+    $ sudo apt install virtualenv
     $ virtualenv venv
     ```
    This creates the virtual environment folder named venv.<br>
