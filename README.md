@@ -38,10 +38,10 @@ To test this webapp on your own machine:
     `$ source venv/bin/activate`<br>
     
 3. To install the requirements in the current environment, enter:<br>
-    `$ pip install -r requirements.txt`<br>
+    `$ pip3 install -r requirements.txt`<br>
     
     Alternatively, if the above does not work, enter:<br>
-    `$ pip3 install -r requirements.txt`<br>
+    `$ pip install -r requirements.txt`<br>
     
 4. Enter the following commands to initialise the db database file<br>
     ```
