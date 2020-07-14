@@ -15,7 +15,7 @@ With this webapp, registered users are able to:
   
 ## Access
 
-To access this webapp, click <a href='https://daretowinweb.herokuapp.com/' target='_blank'>DareToWin</a>
+To access this webapp, click <a href='https://daretowinweb.herokuapp.com/' target='_blank'>here</a>
 
 ## Setup
 
