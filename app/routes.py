@@ -46,7 +46,7 @@ def leaderboard():
                             posts=posts.items, upvote=Upvote, next_url=next_url, 
                             prev_url=prev_url, start_num=start_num)
 
-@app.route('/', methods=['GET', 'POST'])
+#@app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
@@ -445,7 +445,7 @@ def delete_comment(comment_id):
     else: #CSRF token missing or invalid
         return redirect(url_for('index'))
 
-
+@app.route('/', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated: 
