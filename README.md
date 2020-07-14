@@ -8,10 +8,14 @@ With this webapp, registered users are able to:
 * upvote other users' dares and gain upvotes for their own
 * earn badges based on the total number of upvotes they have
 * comment on other users' dares
-* follow other users so that their dares show up on your main feed
+* follow other users so that their dares show up on their main feed
 * report inappropriate dares and comments,<br>
   after which an admin will review said content and decide whether to ban it,<br>
-  doing so will award the offending user with a demerit
+  doing so will cause the offending user to get a demerit
+  
+## Access
+
+To access this webapp, click <a href='https://daretowinweb.herokuapp.com/' target='_blank'>DareToWin</a>
 
 ## Setup
 
@@ -23,7 +27,7 @@ To test this webapp on your own machine:
     $ sudo apt-get install python3-venv
     $ python3 -m venv venv
     ```
-    Alternatively, for versions of Python older than 3:<br>
+    Alternatively, if the above does not work, enter:<br>
     ```
     $ sudo apt install virtualenv
     $ virtualenv venv
@@ -35,6 +39,9 @@ To test this webapp on your own machine:
     
 3. To install the requirements in the current environment, enter<br>
     `$ pip install -r requirements.txt`<br>
+    
+    Alternatively, if the above does not work, enter:<br>
+    `$ pip3 install -r requirements.txt`<br>
     
 4. Enter the following commands to initialise the db database file<br>
     ```
@@ -58,4 +65,4 @@ To test this webapp on your own machine:
 NOTE: In the current build, the first user to register will have access to admin privileges
 
 ## Acknowledgements
-The code for this webapp is based on the <a href="https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world" target="_blank">Flask Tutorial by Miguel Grinberg</a>
+The code for this webapp is inspired from <a href="https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world" target="_blank">Flask Tutorial by Miguel Grinberg</a>
