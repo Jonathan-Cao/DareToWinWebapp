@@ -37,7 +37,7 @@ To test this webapp on your own machine:
 2. Enter the virtual environment by entering<br>
     `$ source venv/bin/activate`<br>
     
-3. To install the requirements in the current environment, enter<br>
+3. To install the requirements in the current environment, enter:<br>
     `$ pip install -r requirements.txt`<br>
     
     Alternatively, if the above does not work, enter:<br>
@@ -57,7 +57,7 @@ To test this webapp on your own machine:
    The following command can be used to find the full path to your current working directory.<br>
    `$ pwd`<br>
 
-5. To start the webapp, enter<br>
+5. To start the webapp, enter:<br>
    `$ flask run`<br>
     
 6. Navigate to http://localhost:5000 in your web browser of choice
