@@ -69,10 +69,11 @@ NOTE: In the current build, the first user to register will have access to admin
 
 ## Tech Stack
 * Python
-* Flask
-* Sqlite
+* <a href=https://flask.palletsprojects.com/en/1.1.x/api/>Flask</a>
+* SqLite/SQLAlchemy
 * HTML
 * Bootstrap
+* Firebase Hosting and Cloud Storage
 
 ## Contributions
 This DareToWin webapp was created by <a href='https://github.com/VisnuRavi'>Visnu</a> and <a href='https://github.com/joncao159'>Jonathan</a>.
