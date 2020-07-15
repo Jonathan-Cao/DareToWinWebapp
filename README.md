@@ -67,6 +67,9 @@ To test this webapp on your own machine:
 
 NOTE: In the current build, the first user to register will have access to admin privileges
 
+## Framework used
+Python Flask: API can be found <a href=https://flask.palletsprojects.com/en/1.1.x/api/>here</a>
+
 ## Contributions
 This DareToWin webapp was created by <a href='https://github.com/VisnuRavi'>Visnu</a> and <a href='https://github.com/joncao159'>Jonathan</a>.
 
