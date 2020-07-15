@@ -16,7 +16,7 @@ With this webapp, registered users are able to:
 ## Video Demo
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=FbWiYg62btQ
 " target="_blank"><img src="http://img.youtube.com/vi/FbWiYg62btQ/0.jpg" 
-alt="IMAGE ALT TEXT HERE" width="960" height="540" border="10" /></a>
+alt="IMAGE ALT TEXT HERE" width="240" height="180" border="0" /></a>
 
 ## Access
 
