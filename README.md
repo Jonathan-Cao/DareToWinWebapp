@@ -65,10 +65,14 @@ To test this webapp on your own machine:
     
 6. Navigate to http://localhost:5000 in your web browser of choice
 
-NOTE: In the current build, the first user to register will have access to admin privileges
+NOTE: In the current build, the first user to register will have access to admin privilegesech
 
-## Frameworks
-Python Flask: API can be found <a href=https://flask.palletsprojects.com/en/1.1.x/api/>here</a>
+## Tech Stack
+* Python
+* Flask
+* Sqlite
+* HTML
+* Bootstrap
 
 ## Contributions
 This DareToWin webapp was created by <a href='https://github.com/VisnuRavi'>Visnu</a> and <a href='https://github.com/joncao159'>Jonathan</a>.
