@@ -65,7 +65,7 @@ To test this webapp on your own machine:
     
 6. Navigate to http://localhost:5000 in your web browser of choice
 
-NOTE: In the current build, the first user to register will have access to admin privilegesech
+NOTE: In the current build, the first user to register will have access to admin privileges
 
 ## Tech Stack
 * Python
