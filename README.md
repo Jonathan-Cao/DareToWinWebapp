@@ -70,7 +70,7 @@ NOTE: In the current build, the first user to register will have access to admin
 ## Tech Stack
 * Python
 * <a href=https://flask.palletsprojects.com/en/1.1.x/api/>Flask</a>
-* SqLite/SQLAlchemy
+* SQLite/SQLAlchemy
 * HTML
 * Bootstrap
 * Firebase Hosting and Cloud Storage
