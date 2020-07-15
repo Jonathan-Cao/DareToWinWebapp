@@ -20,10 +20,6 @@ With this webapp, registered users are able to:
 " target="_blank"><img src="http://img.youtube.com/vi/FbWiYg62btQ/0.jpg" 
 alt="IMAGE ALT TEXT HERE" width="480" height="360" border="0" /></a>
 
-## Access
-
-To access this webapp, click <a href='https://daretowinweb.herokuapp.com/' target='_blank'>here</a>
-
 ## Setup
 
 To test this webapp on your own machine:
