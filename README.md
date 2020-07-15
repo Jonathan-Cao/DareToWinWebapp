@@ -1,5 +1,7 @@
 # DareToWin Webapp
 
+Connecting daredoers everywhere
+
 ## Introduction
 
 This webapp acts as a companion social media app to the Telegram Bot game <a href=https://github.com/VisnuRavi/DareToWinSubmit>DareToWin</a> (@daretowinbot)<br>
@@ -68,6 +70,9 @@ To test this webapp on your own machine:
 6. Navigate to http://localhost:5000 in your web browser of choice
 
 NOTE: In the current build, the first user to register will have access to admin privileges
+
+## Contributions
+This DareToWin webapp was created by <a href='https://github.com/VisnuRavi'>Visnu</a> and <a href='https://github.com/joncao159'>Jonathan</a>.
 
 ## Acknowledgements
 The code for this webapp is inspired by the <a href="https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world" target="_blank">Flask Tutorial by Miguel Grinberg</a>
