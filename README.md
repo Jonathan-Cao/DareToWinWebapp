@@ -67,7 +67,7 @@ To test this webapp on your own machine:
 
 NOTE: In the current build, the first user to register will have access to admin privileges
 
-## Framework used
+## Frameworks
 Python Flask: API can be found <a href=https://flask.palletsprojects.com/en/1.1.x/api/>here</a>
 
 ## Contributions
