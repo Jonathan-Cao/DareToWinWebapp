@@ -12,12 +12,6 @@ With this webapp, registered users are able to:
 * report inappropriate dares and comments,<br>
   after which an admin will review said content and decide whether to ban it,<br>
   doing so will cause the offending user to get a demerit
-  
-## Video demo
-<video width="960" height="540" controls>
-  <source src="https://github.com/joncao159/DareToWinWebapp/blob/master/.gitignore/DareToWinWebApp.mp4" type="video/mp4">
-Your browser does not support the video tag.
-</video>
 
 ## Access
 
