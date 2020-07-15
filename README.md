@@ -13,6 +13,11 @@ With this webapp, registered users are able to:
   after which an admin will review said content and decide whether to ban it,<br>
   doing so will cause the offending user to get a demerit
 
+## Video Demo
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=FbWiYg62btQ
+" target="_blank"><img src="http://img.youtube.com/vi/FbWiYg62btQ/0.jpg" 
+alt="IMAGE ALT TEXT HERE" width="960" height="540" border="10" /></a>
+
 ## Access
 
 To access this webapp, click <a href='https://daretowinweb.herokuapp.com/' target='_blank'>here</a>
