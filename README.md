@@ -73,7 +73,8 @@ NOTE: In the current build, the first user to register will have access to admin
 * SQLite/SQLAlchemy
 * HTML
 * Bootstrap
-* Firebase Hosting and Cloud Storage
+* Firebase Cloud Storage
+* Heroku Cloud Application Platform
 
 ## Contributions
 This DareToWin webapp was created by <a href='https://github.com/VisnuRavi'>Visnu</a> and <a href='https://github.com/Jonathan-Cao'>Jonathan</a>.
