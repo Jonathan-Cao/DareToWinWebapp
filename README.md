@@ -76,7 +76,7 @@ NOTE: In the current build, the first user to register will have access to admin
 * Firebase Hosting and Cloud Storage
 
 ## Contributions
-This DareToWin webapp was created by <a href='https://github.com/VisnuRavi'>Visnu</a> and <a href='https://github.com/joncao159'>Jonathan</a>.
+This DareToWin webapp was created by <a href='https://github.com/VisnuRavi'>Visnu</a> and <a href='https://github.com/Jonathan-Cao'>Jonathan</a>.
 
 ## Acknowledgements
 The code for this webapp is inspired by the <a href="https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world" target="_blank">Flask Tutorial by Miguel Grinberg</a>
