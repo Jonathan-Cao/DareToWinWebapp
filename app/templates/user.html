@@ -5,7 +5,10 @@
         <tr class="table table-hover">
             <td width='280px'><img src="{{ user.avatar(256) }}"></td>
             <td>
-                <h1>{{ user.badge }} {{ user.username }}</h1>
+                <h1>
+                    <span class="{{ badge_colour[user.badge] }}">{{ user.badge }}</span>
+                    {{ user.username }}
+                </h1>
                 {% if user.about_me %}
                 <p>{{ user.about_me }}</p>
                 {% endif %}

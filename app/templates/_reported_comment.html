@@ -6,6 +6,7 @@
                 </a>
             </td>
             <td>
+                <span class="{{ badge_colour[comment.author.badge] }}">{{ comment.author.badge }}</span>
                 <a href="{{ url_for('user', username=comment.author.username) }}">
                     {{ comment.author.username }}
                 </a>
