@@ -17,19 +17,6 @@
                 </p>
             </td>
             <td align="right">
-                '''
-                <p>
-                    <form action="{{ url_for('action', id=report.id) }}" method="post">
-                        {{ form2.hidden_tag() }}
-                        <p>
-                        Action Taken<br>
-                        {{ form2.reason(size=32) }}
-                         </p>
-                        {{ form2.submit() }} <!Submit button repurposed to Ban button>
-                    </form>
-                </p>
-                <br>
-                '''
                 <p>
                     <form action="{{ url_for('dismiss_case', id = report.id) }}" method="post">
                         {{ form.hidden_tag() }}
