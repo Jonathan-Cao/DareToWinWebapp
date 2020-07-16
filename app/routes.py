@@ -612,7 +612,7 @@ def following(username):
     prev_url = url_for('following', username=user.username, page=following.prev_num) \
         if following.has_prev else None
     return render_template('following.html', form=form, user=user, following=following.items,
-                            next_url=next_url, prev_url=prev_url)
+                            badge_colour=badge_colour, next_url=next_url, prev_url=prev_url)
     
 @app.route('/followers/<username>', methods=['GET', 'POST'])
 @login_required
@@ -627,7 +627,7 @@ def followers(username):
     prev_url = url_for('followers', username=user.username, page=followers.prev_num) \
         if followers.has_prev else None
     return render_template('followers.html', form=form, user=user, followers=followers.items,
-                            next_url=next_url, prev_url=prev_url)
+                            badge_colour=badge_colour, next_url=next_url, prev_url=prev_url)
                            
 @app.route('/follow/<username>', methods=['POST'])
 @login_required
