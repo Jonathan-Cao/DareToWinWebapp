@@ -9,6 +9,13 @@ from werkzeug.utils import secure_filename
 from werkzeug.urls import url_parse 
 from datetime import datetime
 
+badge_colour = {'Rookie': "label label-default",
+                'Brave': "label label-warning",
+                'Fearless': "label label-info",
+                'Daredevil': "label label-danger",
+                'Hero': "label label-success",
+                'Viking': "label label-primary"}
+
 @app.route('/explore')
 @login_required
 def explore():
@@ -24,7 +31,7 @@ def explore():
     if current_user.banned:
         return render_template('banned.html')
     return render_template('explore.html', title='Explore', form=form, form0=form0, posts=posts.items,
-                            upvote=Upvote, next_url=next_url, prev_url=prev_url)
+                            upvote=Upvote, badge_colour=badge_colour, next_url=next_url, prev_url=prev_url)
                             
 @app.route('/leaderboard')
 @login_required
@@ -43,8 +50,8 @@ def leaderboard():
     if current_user.banned:
         return render_template('banned.html')
     return render_template('leaderboard.html', title='Leaderboard', form=form, form0=form0,
-                            posts=posts.items, upvote=Upvote, next_url=next_url, 
-                            prev_url=prev_url, start_num=start_num)
+                            posts=posts.items, upvote=Upvote, badge_colour=badge_colour,
+                            next_url=next_url, prev_url=prev_url, start_num=start_num)
 
 #@app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -81,7 +88,7 @@ def index():
     if current_user.banned:
         return render_template('banned.html')
     return render_template('index.html', title='Home', form=form, form2=form2, form0=form0,
-                            posts=posts.items, upvote=Upvote,
+                            posts=posts.items, upvote=Upvote, badge_colour=badge_colour,
                             next_url=next_url, prev_url=prev_url)
                             
 @app.route('/reported_general', methods = ['GET', 'POST'])
@@ -97,7 +104,8 @@ def reported_general():
         prev_url = url_for('reported_general', page = reports.prev_num)\
             if reports.has_prev else None
         return render_template('reported_general.html', reports = reports.items, form = form, 
-                                prev_url = prev_url, next_url = next_url, title = 'Reported General', form0 = form0)
+                                prev_url = prev_url, next_url = next_url, 
+                                badge_colour=badge_colour, title = 'Reported General', form0 = form0)
     return render_template('admin_restricted.html')
                             
 @app.route('/reported_posts', methods=['GET', 'POST'])
@@ -115,7 +123,7 @@ def reported_posts():
         prev_url = url_for('reported_posts', page=posts.prev_num) \
             if posts.has_prev else None
         return render_template('reported_posts.html', title='Reported Posts', posts=posts.items,
-                                form=form, form2=form2, form0=form0,
+                                form=form, form2=form2, form0=form0, badge_colour=badge_colour,
                                 next_url=next_url, prev_url=prev_url)
     return render_template('admin_restricted.html')
                             
@@ -134,7 +142,7 @@ def post_report_reasons(post_id):
             if reports.has_prev else None
 
         return render_template('report_reasons.html', title='Reasons for report',
-                                reports=reports.items)
+                                badge_colour=badge_colour, reports=reports.items)
     return render_template('admin_restricted.html')
         
 @app.route('/ban_post/<post_id>', methods=['POST'])
@@ -171,7 +179,7 @@ def reported_comments():
             if comments.has_prev else None
         return render_template('reported_comments.html', title='Reported Posts', 
                                 comments=comments.items, form=form, form2=form2, form0=form0,
-                                next_url=next_url, prev_url=prev_url)
+                                badge_colour=badge_colour, next_url=next_url, prev_url=prev_url)
     return render_template('admin_restricted.html')
     
 @app.route('/comment_report_reasons/<comment_id>', methods=['GET'])
@@ -189,7 +197,7 @@ def comment_report_reasons(comment_id):
             if reports.has_prev else None
 
         return render_template('report_reasons.html', title='Reasons for report',
-                                reports=reports.items)
+                                badge_colour=badge_colour, reports=reports.items)
     return render_template('admin_restricted.html')
 
 @app.route('/ban_comment/<comment_id>', methods=['POST'])
@@ -222,7 +230,7 @@ def reported_users():
             if users.has_next else None
         prev_url = url_for('reported_users', page=users.prev_num) \
             if users.has_prev else None
-        return render_template('reported_users.html', title='Reported Users', 
+        return render_template('reported_users.html', title='Reported Users', badge_colour=badge_colour,
                                 users=users.items, form=form, form2=form2, 
                                 next_url=next_url, prev_url=prev_url, form0 = form0)
     return render_template('admin_restricted.html')
@@ -241,7 +249,8 @@ def user_report_reasons(user_id):
         prev_url = url_for('report_reasons', post_id=post.id, page=reports.prev_num) \
             if reports.has_prev else None
 
-        return render_template('report_reasons.html', title='Reasons for report', reports=reports.items)
+        return render_template('report_reasons.html', title='Reasons for report', 
+                                badge_colour=badge_colour, reports=reports.items)
     return render_template('admin_restricted.html')
     
 @app.route('/ban_profile/<profile_id>', methods = ['POST'])
@@ -426,7 +435,7 @@ def comments(post_id):
         if comments.has_prev else None
     
     return render_template('comments_section.html', title='Comments', upvote=Upvote,
-                            form=form, post=post, comments=comments.items)
+                            badge_colour=badge_colour, form=form, post=post, comments=comments.items)
 
 @app.route('/delete_comment/<comment_id>', methods=['POST'])
 @login_required                            
@@ -515,8 +524,9 @@ def user(username):
         if posts.has_prev else None
     if user.banned and current_user.id != 1:
         return render_template('banned.html')
-    return render_template('user.html', user=user, form=form, form2=form2, form0=form0,
-                            posts=posts.items, upvote=Upvote, next_url=next_url, prev_url=prev_url)
+    return render_template('user.html', user=user, form=form, form2=form2, form0=form0, 
+                            posts=posts.items, upvote=Upvote, badge_colour=badge_colour,
+                            next_url=next_url, prev_url=prev_url)
 
 @app.route('/reset_password_request', methods=['GET', 'POST'])
 def reset_password_request():
