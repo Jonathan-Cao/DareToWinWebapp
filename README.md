@@ -58,7 +58,7 @@ To test this webapp on your own machine:
    edit the UPLOAD_FOLDER variable with the path to your directory of choice<br>
    This directory will be used to store uploaded video files.<br>
    The following command can be used to find the full path to your current working directory.<br>
-   `$ pwd`<br>
+   `(venv) $ pwd`<br>
 
 5. To start the webapp, enter:<br>
    `(venv) $ flask run`<br>
