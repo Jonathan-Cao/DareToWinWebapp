@@ -41,16 +41,16 @@ To test this webapp on your own machine:
     `$ source venv/bin/activate`<br>
     
 3. To install the requirements in the current environment, enter:<br>
-    `$ pip3 install -r requirements.txt`<br>
+    `(venv) $ pip3 install -r requirements.txt`<br>
     
     Alternatively, if the above does not work, enter:<br>
-    `$ pip install -r requirements.txt`<br>
+    `(venv) $ pip install -r requirements.txt`<br>
     
 4. Enter the following commands to initialise the db database file<br>
     ```
-    $ flask db init
-    $ flask db migrate -m "initial_migration"
-    $ flask db upgrade
+    (venv) $ flask db init
+    (venv) $ flask db migrate -m "initial_migration"
+    (venv) $ flask db upgrade
     ```
    You should see a new file named app.db in the root directory<br>
    
@@ -61,7 +61,7 @@ To test this webapp on your own machine:
    `$ pwd`<br>
 
 5. To start the webapp, enter:<br>
-   `$ flask run`<br>
+   `(venv) $ flask run`<br>
     
 6. Navigate to http://localhost:5000 in your web browser of choice
 
