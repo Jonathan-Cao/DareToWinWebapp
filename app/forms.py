@@ -52,6 +52,11 @@ class CommentForm(FlaskForm):
     comment = TextAreaField('Enter a comment!', validators=[
         DataRequired(), Length(min=1, max=140)])
     submit = SubmitField('Submit')
+
+class MessageForm(FlaskForm):
+    message = TextAreaField('Enter a message!', validators=[
+        DataRequired(), Length(min=1, max=140)])
+    submit = SubmitField('Send')
     
 class ReportForm(FlaskForm):
     reason = TextAreaField('Please state why this post is inappropriate', validators=[

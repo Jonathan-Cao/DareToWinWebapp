@@ -15,6 +15,13 @@ followers = db.Table('followers',
     db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
     db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
 )
+'''
+messengers = db.Table('messengers',
+    db.Column('messenger_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('messaged_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('timestamp', db.DateTime, index = True, default = datetime.utcnow)
+)
+'''
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -44,6 +51,19 @@ class User(UserMixin, db.Model):
         primaryjoin=(followers.c.follower_id == id), #Follower user
         secondaryjoin=(followers.c.followed_id == id), #Followed user
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
+
+    messages_from = db.relationship('Message', backref='author', lazy='dynamic', foreign_keys='Message.author_id')
+    messages_to = db.relationship('Message', backref='profile', lazy='dynamic', foreign_keys='Message.profile_id')
+
+    convos_from = db.relationship('Conversation', backref='author', lazy='dynamic', foreign_keys='Conversation.author_id')
+    convos_to = db.relationship('Conversation', backref='profile', lazy='dynamic', foreign_keys='Conversation.profile_id')
+
+    messaged = db.relationship(
+        'User',
+        secondary = messengers,
+        primaryjoin=(messengers.c.messenger_id == id),
+        secondaryjoin=(messengers.c.messaged_id == id),
+        backref = db.backref('messengers', lazy='dynamic'), lazy='dynamic')
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -91,6 +111,11 @@ class User(UserMixin, db.Model):
         own = Post.query.filter_by(user_id=self.id)
         return own.order_by(Post.timestamp.desc())
             
+    def msgs_btw(self, username):
+        msgs_from_self = Message.query.filter_by(author = self, profile = User.query.filter_by(username = username).first_or_404())
+        msgs_to_self = Message.query.filter_by(author = User.query.filter_by(username = username).first_or_404(), profile = self)
+        return msgs_from_self.union(msgs_to_self).order_by(Message.timestamp.desc())
+   
     def followed_posts(self):
         #Posts by followed users
         followed = Post.query.join(
@@ -99,6 +124,7 @@ class User(UserMixin, db.Model):
         #Own posts
         own = Post.query.filter_by(user_id=self.id)
         return followed.union(own).order_by(Post.timestamp.desc())
+    
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -164,6 +190,25 @@ class Report(db.Model):
     page_of_report = db.Column(db.String(30))
 
     def __repr__(self):
-        return 'Report by ' + str(self.author.username)   
-    
+        return 'Report by ' + str(self.author.username)
 
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.String(140))
+    timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))#message from this guy
+    profile_id = db.Column(db.Integer, db.ForeignKey('user.id'))#message to this guy
+    seen = db.Column(db.Integer, default = 0)
+    flashed = db.Column(db.Integer, default = 0)
+
+    def __repr__(self):
+        return 'Message by ' + self.author.username + ' to ' + self.profile.username
+
+class Conversation(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))#convo first started from this guy
+    profile_id = db.Column(db.Integer, db.ForeignKey('user.id'))#convo first received by this guy
+    
+    def __repr__(self):
+        return 'Conversation from ' + self.author.username + ' to ' + self.profile.username
