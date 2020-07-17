@@ -17,13 +17,19 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{{ url_for('index') }}">DareToWin</a>
+                {% if current_user.is_anonymous %}
+                    <a class='navbar-brand' href='#'>DareToWin</a>
+                {% else %}
+                    <a class="navbar-brand" href="{{ url_for('index', username = current_user.username) }}">DareToWin</a>
+                {% endif %}
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ url_for('index') }}">Home</a></li>
-                    <li><a href="{{ url_for('explore') }}">Explore</a></li>
-                    <li><a href="{{ url_for('leaderboard') }}">Leaderboard</a></li>
+                    {% if current_user.is_authenticated %}                
+                        <li><a href="{{ url_for('index', username = current_user.username) }}">Home</a></li>
+                        <li><a href="{{ url_for('explore') }}">Explore</a></li>
+                        <li><a href="{{ url_for('leaderboard') }}">Leaderboard</a></li>
+                    {% endif %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_anonymous %}
@@ -50,6 +56,7 @@
                    </li>
 
                         {% else %}
+                        <li><a href='{{url_for('messages_section', username = current_user.username) }}'>Messages</a></li>
                         <li><a href="{{ url_for('general_report', prev = request.path) }}">Report</a></li>
                         {% endif %}
                     <li><a href="{{ url_for('logout') }}">Logout</a></li>
