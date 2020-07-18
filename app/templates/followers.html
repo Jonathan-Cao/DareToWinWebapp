@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block app_content %}
-    <h1>{{ user.username }}'s followers</h1>
+    <h1>{{ user.username }} is followed by:</h1>
     {% if not followers %}
         <h3 style="text-align: center;">
             {{ user.username }} is not followed by anyone
