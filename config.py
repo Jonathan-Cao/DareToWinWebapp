@@ -19,5 +19,7 @@ class Config(object):
     
     POSTS_PER_PAGE = 3
     COMMENTS_PER_PAGE = 5
+    MESSAGES_PER_PAGE = 5
+    CONVERSATIONS_PER_PAGE = 5
     
     UPLOAD_FOLDER = "PATH_TO_UPLOAD_FOLDER"
