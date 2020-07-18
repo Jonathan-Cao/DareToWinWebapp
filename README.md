@@ -11,6 +11,7 @@ With this webapp, registered users are able to:
 * earn badges based on the total number of upvotes they have
 * comment on other users' dares
 * follow other users so that their dares show up on their main feed
+* send private messages to other users
 * report inappropriate dares and comments,<br>
   after which an admin will review said content and decide whether to ban it,<br>
   doing so will cause the offending user to get a demerit
@@ -65,7 +66,8 @@ To test this webapp on your own machine:
     
 6. Navigate to http://localhost:5000 in your web browser of choice
 
-NOTE: In the current build, the first user to register will have access to admin privileges
+NOTE: In the current build, the first user to register will have access to admin privileges<br>
+      Additionally, this user will not be able to send or receive messages
 
 ## Tech Stack
 * Python
