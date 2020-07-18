@@ -1,10 +1,10 @@
 from flask import render_template, flash, redirect, request, url_for, send_from_directory, abort
 import os
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, ResetPasswordRequestForm, ResetPasswordForm, EditProfileForm, ChangePasswordForm, EmptyForm, PostForm, CommentForm, ReportForm, BanForm, SearchProfileForm
+from app.forms import LoginForm, RegistrationForm, ResetPasswordRequestForm, ResetPasswordForm, EditProfileForm, ChangePasswordForm, EmptyForm, PostForm, CommentForm, ReportForm, BanForm, SearchProfileForm, MessageForm
 from app.email import send_password_reset_email
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User, Post, Comment, Upvote, Report
+from app.models import User, Post, Comment, Upvote, Report, Message, Conversation
 from werkzeug.utils import secure_filename
 from werkzeug.urls import url_parse 
 from datetime import datetime
@@ -415,6 +415,7 @@ def downvote(post_id):
 def comments(post_id):
     post = Post.query.filter_by(id=post_id).first_or_404()
     form = CommentForm()
+    form0 = SearchProfileForm()
     if form.validate_on_submit():
         comment = Comment(body=form.comment.data, author=current_user, post=post)
         db.session.add(comment)
@@ -435,7 +436,8 @@ def comments(post_id):
         if comments.has_prev else None
     
     return render_template('comments_section.html', title='Comments', upvote=Upvote,
-                            badge_colour=badge_colour, form=form, post=post, comments=comments.items)
+                            badge_colour=badge_colour, form=form, form0=form0, 
+                            post=post, comments=comments.items)
 
 @app.route('/delete_comment/<comment_id>', methods=['POST'])
 @login_required                            
@@ -564,6 +566,14 @@ def before_request():
         current_user.last_seen = datetime.utcnow()
         #No need for db.session.add() as load_user function in models.py already puts
         #target user in database session.
+        messages = current_user.messages_to.union(current_user.messages_from)
+        total_flashes = 0
+        for message in messages:
+            if message.flashed == 0 and message.author != current_user:
+                total_flashes += 1
+                message.flashed = 1
+        if total_flashes > 0:
+            flash('You have ' + str(total_flashes) + ' new messages!')
         db.session.commit()
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
@@ -667,3 +677,81 @@ def unfollow(username):
         return redirect(request.referrer)
     else: #CSRF token missing or invalid
         return redirect(url_for('index'))
+
+@app.route('/messages_section/<username>')
+@login_required
+def messages_section(username):
+    form0 = SearchProfileForm()
+    page = request.args.get('page', 1, type = int)
+    convos = Conversation.query.filter_by(
+        author = current_user).union(
+        Conversation.query.filter_by(
+        profile = current_user)).order_by(
+        Conversation.timestamp.desc()).paginate(page, app.config['CONVERSATIONS_PER_PAGE'], False)
+
+    next_url = url_for('messages_section', username = username, page = convos.next_num) \
+        if convos.has_next else None
+    prev_url = url_for('messages_section', username = username, page = convos.prev_num) \
+        if convos.has_prev else None
+
+    convos_with = []
+    for convo in convos.items:
+        if convo.author == current_user:
+            convos_with.append(convo.profile)
+        else:
+            convos_with.append(convo.author)
+
+    return render_template('messages_section.html', convos_with = convos_with, 
+                            next_url = next_url, prev_url = prev_url, 
+                            badge_colour=badge_colour, form0 = form0, Message = Message)
+
+@app.route('/messages/<username>', methods = ['GET', 'POST'])
+@login_required
+def messages(username):
+    msg_to = User.query.filter_by(username = username).first_or_404()
+    if msg_to.id == 1 or msg_to == current_user: #Prevent chatting with admin or self
+        return render_template('admin_restricted.html')
+    form0 = SearchProfileForm()
+    form = MessageForm()
+    if form.validate_on_submit():
+        message = Message(body = form.message.data, author = current_user, profile = msg_to)
+        db.session.add(message)
+        flash('Message sent!')
+
+    ##add change to table
+        prev_convo = None
+        new_convo = None
+        try:
+            print('curstart')
+            current_start = Conversation.query.filter_by(author = current_user, profile = msg_to)
+            print('msgstart')
+            msg_to_start = Conversation.query.filter_by(author = msg_to, profile = current_user)
+            print('union')
+            prev_convo = current_start.union(msg_to_start).first()
+            print('set_tm')
+            prev_convo.timestamp = message.timestamp
+            print('finish try')
+        except:
+            print('new convo')
+            new_convo = Conversation(author = current_user, profile = msg_to)
+            db.session.add(new_convo)
+
+        db.session.commit()
+        return redirect(url_for('messages', username = username))
+    page = request.args.get('page', 1, type=int)
+
+    messages = current_user.msgs_btw(username).paginate(page, app.config['MESSAGES_PER_PAGE'], False)
+
+    for message in messages.items:
+        if message.author != current_user:
+            message.seen = 1    
+    db.session.commit()
+
+    next_url = url_for('messages', username = username, page = messages.next_num) \
+        if messages.has_next else None
+    prev_url = url_for('messages', username = username, page = messages.prev_num) \
+        if messages.has_prev else None
+
+    return render_template('messages.html', title = 'Messages', messages = messages.items, 
+                            form0 = form0, form = form, user = msg_to, badge_colour=badge_colour,
+                            prev_url = prev_url, next_url = next_url)

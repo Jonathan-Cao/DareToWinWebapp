@@ -97,3 +97,8 @@ class SearchProfileForm(FlaskForm):
         user = User.query.filter_by(username = username.data).first()
         if user is None:
             raise ValidationError('Username not Found')
+
+class MessageForm(FlaskForm):
+    message = TextAreaField('Enter a message!', validators=[
+        DataRequired(), Length(min=1, max=140)])
+    submit = SubmitField('Send')
