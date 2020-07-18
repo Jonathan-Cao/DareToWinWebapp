@@ -6,11 +6,13 @@
                 </a>
             </td>
             <td>
-                <span class="{{ badge_colour[post.author.badge] }}">{{ post.author.badge }}</span>
+                <h4 style="display:inline">
+                    <span class="{{ badge_colour[post.author.badge] }}">{{ post.author.badge }}</span>
+                </h4>
                 <a href="{{ url_for('user', username=post.author.username) }}">
                     {{ post.author.username }}
                 </a>
-                posted on {{ moment(post.timestamp).format('LLL') }}:  
+                posted on {{ moment(post.timestamp).format('LLL') }}:
                 <br>
                 {% if post.banned %}
                     This post has been banned for the following reason: {{ post.ban_reason }}

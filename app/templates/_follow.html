@@ -6,7 +6,9 @@
                 </a>
             </td>
             <td>
-            <span class="{{ badge_colour[followed.badge] }}">{{ followed.badge }}</span>
+            <h4 style="display:inline">
+                <span class="{{ badge_colour[followed.badge] }}">{{ followed.badge }}</span>
+            </h4>
             <a href="{{ url_for('user', username=followed.username) }}">
                 {{ followed.username }}
             </a>

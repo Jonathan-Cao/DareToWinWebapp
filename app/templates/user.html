@@ -39,6 +39,13 @@
                     </form>
                 </p>
                 {% endif %}
+                {% if user != current_user and user.id != 1 %}
+                <p>
+                    <a href="{{ url_for('messages', username = user.username) }}">
+                        Message {{ user.username }}
+                    </a>
+                </p>
+                {% endif %}
                 <p>
                 <a href="{{ url_for('specific_report', id=user.id, prev=request.path, type = 'profile') }}">
                     Report inappropriate content
