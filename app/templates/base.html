@@ -29,6 +29,11 @@
                     {% if current_user.is_anonymous %}
                     <li><a href="{{ url_for('login') }}">Login</a></li>
                     {% else %}
+			<li>
+                            <a href="{{ url_for('user', username = current_user.username) }}">
+                            {{ current_user.username }}'s Profile
+                            </a>
+                        </li>
                         {% if current_user.id == 1 %}
                         <li class="dropdown">
                         <a class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -68,11 +73,6 @@
                             </a>
                         </li>
                         {% endif %}
-                    <li>
-                        <a href="{{ url_for('user', username = current_user.username) }}">
-                        {{ current_user.username }}'s Profile
-                        </a>
-                    </li>
                     <li><a href="{{ url_for('logout') }}">Logout</a></li>
                     {% endif %}
                 </ul>
