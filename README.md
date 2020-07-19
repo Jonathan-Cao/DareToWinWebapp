@@ -16,9 +16,9 @@ With this webapp, registered users are able to:
   after which an admin will review said content and decide whether to ban it,<br>
   doing so will cause the offending user to get a demerit
 
-## Video Demo
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=FbWiYg62btQ
-" target="_blank"><img src="http://img.youtube.com/vi/FbWiYg62btQ/0.jpg" 
+## Video Demo (Telegram Bot + Webapp)
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=HPJPW90dsZM
+" target="_blank"><img src="http://img.youtube.com/vi/HPJPW90dsZM/0.jpg" 
 alt="IMAGE ALT TEXT HERE" width="480" height="360" border="0" /></a>
 
 ## Setup
