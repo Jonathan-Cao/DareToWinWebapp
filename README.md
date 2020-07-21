@@ -4,7 +4,7 @@ Connecting daredoers everywhere
 
 ## Introduction
 
-The <a href='http://daretowinweb.herokuapp.com/'>DareToWin Webapp</a> acts as a companion social media app to the Telegram Bot game <a href=https://github.com/VisnuRavi/DareToWinSubmit>DareToWin</a> (@daretowinbot)<br>
+The <a href='http://daretowinweb.herokuapp.com/'>DareToWin Webapp</a> acts as a companion social media app to the <a href=https://github.com/VisnuRavi/DareToWinSubmit>Telegram Bot game DareToWin (@daretowinbot)</a><br>
 With this webapp, registered users are able to:
 * upload videos of their dares (supports mp4 and webm files)
 * upvote other users' dares and gain upvotes for their own
@@ -16,7 +16,7 @@ With this webapp, registered users are able to:
   after which an admin will review said content and decide whether to ban it,<br>
   doing so will cause the offending user to get a demerit
 
-## Video Demo (Telegram Bot + Webapp)
+## Video Demo (<a href=https://github.com/VisnuRavi/DareToWinSubmit>Telegram Bot</a> + <a href='http://daretowinweb.herokuapp.com/'>Webapp</a>)
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=HPJPW90dsZM
 " target="_blank"><img src="http://img.youtube.com/vi/HPJPW90dsZM/0.jpg" 
 alt="IMAGE ALT TEXT HERE" width="480" height="360" border="0" /></a>
