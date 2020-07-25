@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 from werkzeug.urls import url_parse 
 from datetime import datetime
 
+#colour of the badge assigned based on total number of upvotes the user has
 badge_colour = {'Rookie': "label label-default",
                 'Brave': "label label-warning",
                 'Fearless': "label label-info",
@@ -16,6 +17,7 @@ badge_colour = {'Rookie': "label label-default",
                 'Hero': "label label-success",
                 'Viking': "label label-primary"}
 
+#allows users to see the latest videos uploaded by all users
 @app.route('/explore')
 @login_required
 def explore():
@@ -32,7 +34,8 @@ def explore():
         return render_template('banned.html')
     return render_template('explore.html', title='Explore', form=form, form0=form0, posts=posts.items,
                             upvote=Upvote, badge_colour=badge_colour, next_url=next_url, prev_url=prev_url)
-                            
+
+#allows users to see the dares with the highest votes in descending order
 @app.route('/leaderboard')
 @login_required
 def leaderboard():
@@ -53,7 +56,7 @@ def leaderboard():
                             posts=posts.items, upvote=Upvote, badge_colour=badge_colour,
                             next_url=next_url, prev_url=prev_url, start_num=start_num)
 
-#@app.route('/', methods=['GET', 'POST'])
+#homepage of the webapp, which allows users to upload and view their feed
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
@@ -90,7 +93,8 @@ def index():
     return render_template('index.html', title='Home', form=form, form2=form2, form0=form0,
                             posts=posts.items, upvote=Upvote, badge_colour=badge_colour,
                             next_url=next_url, prev_url=prev_url)
-                            
+
+#allows admistrators to view general bugs/issues that users face and solve them if need be
 @app.route('/reported_general', methods = ['GET', 'POST'])
 @login_required
 def reported_general():
@@ -107,7 +111,8 @@ def reported_general():
                                 prev_url = prev_url, next_url = next_url, 
                                 badge_colour=badge_colour, title = 'Reported General', form0 = form0)
     return render_template('admin_restricted.html')
-                            
+
+#allows admistrators to view posts that have been reported and ban them if need be
 @app.route('/reported_posts', methods=['GET', 'POST'])
 @login_required
 def reported_posts():
@@ -126,7 +131,8 @@ def reported_posts():
                                 form=form, form2=form2, form0=form0, badge_colour=badge_colour,
                                 next_url=next_url, prev_url=prev_url)
     return render_template('admin_restricted.html')
-                            
+
+#allows admistrators to view the reasons as to why this post was reported
 @app.route('/post_report_reasons/<post_id>', methods=['GET'])
 @login_required
 def post_report_reasons(post_id):
@@ -144,7 +150,8 @@ def post_report_reasons(post_id):
         return render_template('report_reasons.html', title='Reasons for report',
                                 badge_colour=badge_colour, reports=reports.items)
     return render_template('admin_restricted.html')
-        
+
+#allows admistrators to ban posts that are deemed inappropriate
 @app.route('/ban_post/<post_id>', methods=['POST'])
 @login_required
 def ban_post(post_id):
@@ -163,6 +170,7 @@ def ban_post(post_id):
         flash("Case resolved")
         return redirect(request.referrer)
 
+#allows admistrators to view comments that have been reported and ban them if need be
 @app.route('/reported_comments', methods=['GET', 'POST'])
 @login_required
 def reported_comments():
@@ -181,7 +189,8 @@ def reported_comments():
                                 comments=comments.items, form=form, form2=form2, form0=form0,
                                 badge_colour=badge_colour, next_url=next_url, prev_url=prev_url)
     return render_template('admin_restricted.html')
-    
+
+#allows admistrators to view the reasons as to why this comment was reported
 @app.route('/comment_report_reasons/<comment_id>', methods=['GET'])
 @login_required
 def comment_report_reasons(comment_id):
@@ -200,6 +209,7 @@ def comment_report_reasons(comment_id):
                                 badge_colour=badge_colour, reports=reports.items)
     return render_template('admin_restricted.html')
 
+#allows admistrators to ban comments that are deemed inappropriate
 @app.route('/ban_comment/<comment_id>', methods=['POST'])
 @login_required
 def ban_comment(comment_id):
@@ -215,7 +225,8 @@ def ban_comment(comment_id):
         db.session.commit()
         flash("Case resolved")
         return redirect(request.referrer)
-        
+
+#allows admistrators to view users that have been reported and ban them if need be
 @app.route('/reported_users', methods=['GET', 'POST'])
 @login_required
 def reported_users():
@@ -234,7 +245,8 @@ def reported_users():
                                 users=users.items, form=form, form2=form2, 
                                 next_url=next_url, prev_url=prev_url, form0 = form0)
     return render_template('admin_restricted.html')
-    
+
+#allows admistrators to view the reasons as to why this user was reported
 @app.route('/user_report_reasons/<user_id>', methods=['GET'])
 @login_required
 def user_report_reasons(user_id):
@@ -252,7 +264,8 @@ def user_report_reasons(user_id):
         return render_template('report_reasons.html', title='Reasons for report', 
                                 badge_colour=badge_colour, reports=reports.items)
     return render_template('admin_restricted.html')
-    
+
+#allows admistrators to ban userss that are deemed inappropriate
 @app.route('/ban_profile/<profile_id>', methods = ['POST'])
 @login_required
 def ban_profile(profile_id):
@@ -269,6 +282,7 @@ def ban_profile(profile_id):
         return redirect(request.referrer)
     return redirect(url_for('index'))
 
+#allows admistrators to dismiss any report where the content reported is deemed appropriate
 @app.route('/dismiss_case/<id>', methods=['POST'])
 @login_required
 def dismiss_case(id):
@@ -290,6 +304,7 @@ def dismiss_case(id):
         flash("Case dismissed")
         return redirect(request.referrer)
 
+#allows users to watch the dare video uploaded
 @app.route('/open_video/<post_dare>')
 @login_required
 def open_video(post_dare):
@@ -299,7 +314,8 @@ def open_video(post_dare):
         return send_from_directory(directory, filename=filename)
     except FileNotFoundError:
         abort(404)
-        
+
+#assigns badge to the user based on the total number of upvotes for that user
 def assign_badge(author):
     if author.upvotes > 4:
         author.badge = 'Viking'
@@ -314,6 +330,7 @@ def assign_badge(author):
     else:
         author.badge = 'Rookie'
 
+#allows users to delete their post
 @app.route('/delete_post/<post_id>', methods=['POST'])
 @login_required                            
 def delete_post(post_id):
@@ -339,7 +356,8 @@ def delete_post(post_id):
         return redirect(request.referrer)
     else: #CSRF token missing or invalid
         return redirect(request.referrer)
-        
+
+#allows users to report other users' dare/comment/profile to admistrators
 @app.route('/specific_report/<id>', methods=['GET', 'POST'])
 @login_required                            
 def specific_report(id):
@@ -361,7 +379,8 @@ def specific_report(id):
         return redirect(prev_url)
     return render_template('specific_report.html', title='Report',
                            form=form)
-                           
+
+#allows users to report general bugs/issues in the webapp to admistrators
 @app.route('/general_report', methods = ['GET', 'POST'])
 @login_required
 def general_report():
@@ -378,6 +397,7 @@ def general_report():
         return redirect(prev_url)
     return render_template('general_report.html', form = form, form0=form0, title='Report')
 
+#allows users to upvote other users' dare videos
 @app.route('/upvote/<post_id>', methods=['POST'])
 @login_required
 def upvote(post_id):
@@ -393,7 +413,8 @@ def upvote(post_id):
         db.session.commit()
         flash('Upvoted! :)')
         return redirect(request.referrer)
-        
+
+#allows users to downvote other users' dare videos
 @app.route('/downvote/<post_id>', methods=['POST'])
 @login_required
 def downvote(post_id):
