@@ -604,6 +604,7 @@ def before_request():
             flash('You have ' + str(total_flashes) + ' new messages!')
         db.session.commit()
 
+#allows users to edit their username and 'About me'
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
@@ -620,6 +621,7 @@ def edit_profile():
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form)
                            
+#allows users to change their passwords
 @app.route('/change_password', methods=['GET', 'POST'])
 @login_required
 def change_password():
@@ -636,7 +638,8 @@ def change_password():
         flash('Password changed successfully')
         return redirect(next_page)
     return render_template('change_password.html', title='Change password', form=form)
-    
+
+#allows users to view all the users the specified user is following
 @app.route('/following/<username>', methods=['GET', 'POST'])
 @login_required
 def following(username):
@@ -651,7 +654,8 @@ def following(username):
         if following.has_prev else None
     return render_template('following.html', form=form, user=user, following=following.items,
                             badge_colour=badge_colour, next_url=next_url, prev_url=prev_url)
-    
+
+#allows users to view the specified user's followers
 @app.route('/followers/<username>', methods=['GET', 'POST'])
 @login_required
 def followers(username):
@@ -666,7 +670,8 @@ def followers(username):
         if followers.has_prev else None
     return render_template('followers.html', form=form, user=user, followers=followers.items,
                             badge_colour=badge_colour, next_url=next_url, prev_url=prev_url)
-                           
+
+#allows users to follow the specified user
 @app.route('/follow/<username>', methods=['POST'])
 @login_required
 def follow(username):
@@ -686,7 +691,7 @@ def follow(username):
     else: #CSRF token missing or invalid
         return redirect(url_for('index'))
 
-
+#allows users to unfollow the specified user
 @app.route('/unfollow/<username>', methods=['POST'])
 @login_required
 def unfollow(username):
@@ -706,6 +711,7 @@ def unfollow(username):
     else: #CSRF token missing or invalid
         return redirect(url_for('index'))
 
+#allows the user to view all the private conversations they are involved in
 @app.route('/messages_section/<username>')
 @login_required
 def messages_section(username):
@@ -733,6 +739,7 @@ def messages_section(username):
                             next_url = next_url, prev_url = prev_url, 
                             badge_colour=badge_colour, form0 = form0, Message = Message)
 
+#allows the user to view the private conversation they are having with the specified user
 @app.route('/messages/<username>', methods = ['GET', 'POST'])
 @login_required
 def messages(username):
