@@ -431,6 +431,7 @@ def downvote(post_id):
         flash('Downvoted! :(')
         return redirect(request.referrer)
 
+#allows users to comment on posts and also view the comment section of the posts
 @app.route('/comments/<post_id>', methods=['GET', 'POST'])
 @login_required
 def comments(post_id):
@@ -442,9 +443,6 @@ def comments(post_id):
         db.session.add(comment)
         db.session.commit()
         flash('Your comment is now live!')
-        #Standard practice to respond to POST requests with redirect
-        #as web browsers refresh by re-issuing the last request.
-        #Without redirecting, refresh will resubmit the form.
         return redirect(url_for('comments', post_id=post.id))
     
     page = request.args.get('page', 1, type=int)    
@@ -460,6 +458,7 @@ def comments(post_id):
                             badge_colour=badge_colour, form=form, form0=form0, 
                             post=post, comments=comments.items)
 
+#allows users to delete their comment
 @app.route('/delete_comment/<comment_id>', methods=['POST'])
 @login_required                            
 def delete_comment(comment_id):
@@ -477,6 +476,7 @@ def delete_comment(comment_id):
     else: #CSRF token missing or invalid
         return redirect(url_for('index'))
 
+#allows users to login to their account
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -500,12 +500,14 @@ def login():
         return redirect(url_for('index'))
         """
     return render_template('login.html', title='Sign In', form=form)
-    
+
+#allows users to logout of their account
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('login'))
-    
+
+#allows users to register their account
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
@@ -519,7 +521,8 @@ def register():
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
-    
+
+#allows users to search users' profiles
 @app.route('/search', methods = ['POST'])
 @login_required
 def search():
@@ -531,6 +534,7 @@ def search():
     flash('Invalid Username')
     return redirect(request.referrer)
 
+#allows users to view users' profiles
 @app.route('/user/<username>') #Profile
 @login_required
 def user(username):
@@ -551,6 +555,7 @@ def user(username):
                             posts=posts.items, upvote=Upvote, badge_colour=badge_colour,
                             next_url=next_url, prev_url=prev_url)
 
+#allows users to reset their password
 @app.route('/reset_password_request', methods=['GET', 'POST'])
 def reset_password_request():
     if current_user.is_authenticated:
@@ -565,6 +570,7 @@ def reset_password_request():
     return render_template('reset_password_request.html',
                            title='Reset Password', form=form)
 
+#checks if the reset password token provided by the user is valid, and if so, allows them to reset password
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
     if current_user.is_authenticated:
@@ -580,8 +586,9 @@ def reset_password(token):
         return redirect(url_for('login'))
     return render_template('reset_password.html', form=form)
 
-@app.before_request 
-#Set last seen by overwriting with current time whenever that user sends a request to the server
+#Set last seen by overwriting with current time whenever that user sends a request to the server,
+#and alerts user if he has any messages
+@app.before_request
 def before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
